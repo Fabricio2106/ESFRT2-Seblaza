@@ -1,77 +1,80 @@
-import logo from "../../assets/img/logo.jpg";
-import promo from "../../assets/img/D_NQ_677380-MLA85135472747_052025-OO.webp";
-import { IoIosSearch } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { IoIosSearch } from "react-icons/io";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { RiBook2Fill } from "react-icons/ri";
+import { BsCart3 } from "react-icons/bs"; // carrito
 
 export default function Navbar1() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-custom py-2">
-      <div className="container-xl d-flex flex-column flex-md-row align-items-start align-items-md-center px-2">
-
-
-        <div className="logo-custom w-100 text-center mb-2 d-block d-md-none">
-          <Link to="/">
-            <img src={logo} className="logo-img" alt="Logo" style={{ maxWidth: "130px" }} />
-          </Link>
+    <>
+      {/* Barra superior negra */}
+      <div className="bg-dark text-white py-2 small">
+        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+          <div>
+            <span className="me-3">Lun-Vie: <strong>8:00 AM - 5:30 PM</strong></span>
+            <span>Visítanos en <strong>1234 Street Address City Address, 1234</strong></span>
+          </div>
+          <div className="d-flex align-items-center mt-2 mt-md-0">
+            <span className="me-3">Llámanos: <strong>(00) 1234 5678</strong></span>
+            <a href="#" className="text-white me-3"><FaFacebookF /></a>
+            <a href="#" className="text-white"><FaInstagram /></a>
+          </div>
         </div>
-
-      
-        <Link className="logo-custom d-none d-md-block me-3" to="/">
-          <img src={logo} className="logo-img" alt="Logo" />
-        </Link>
-
-       
-        <div className="d-flex align-items-center w-100 mb-2 mb-md-0">
-          <form
-            className="d-flex flex-grow-1"
-            role="search"
-            style={{ maxWidth: "100%" }}
-          >
-            <input
-              className="form-control"
-              type="search"
-              placeholder="Buscar productos, marcas y más..."
-              aria-label="Buscar"
-              style={{
-                borderRight: "none",
-                borderRadius: "0 2px 2px 0",
-              }}
-            />
-            <span
-              className="input-group-text bg-white"
-              style={{
-                borderLeft: "none",
-                borderRadius: "0 2px 2px 0",
-                cursor: "pointer",
-              }}
-            >
-              <IoIosSearch size={20} />
-            </span>
-          </form>
-
-          <button
-            className="navbar-toggler ms-2"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
-
-        
-        <a href="#" className="d-none d-lg-block ms-3">
-          <img
-            src={promo}
-            alt="Promo"
-            className="img-fluid"
-            style={{ maxHeight: "39px", maxWidth: "340px" }}
-          />
-        </a>
       </div>
-    </nav>
+
+      {/* Navbar principal blanca */}
+      <nav className="navbar navbar-expand-lg bg-white shadow-sm">
+        <div className="container py-3 d-flex align-items-center justify-content-between">
+
+          {/* Logo a la izquierda */}
+          <Link className="navbar-brand text-primary d-flex align-items-center" to="/">
+            <RiBook2Fill size={34} className="me-2" />
+          </Link>
+
+          {/* Menú centrado */}
+          <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul className="navbar-nav text-center">
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/">Home</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/extractores-bano">Extractores de baño</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/extractores-cocina">Extractores de cocina</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/ventiladores">Ventiladores</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/aire-acondicionado">Aire acondicionado</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Sección derecha: cuenta, login, íconos */}
+          <div className="d-flex align-items-center gap-3">
+            <Link to="/crear-cuenta" className="text-dark text-decoration-none fw-semibold">Crea tu cuenta</Link>
+            <Link to="/ingresar" className="text-dark text-decoration-none fw-semibold">Ingresa</Link>
+            
+            {/* Ícono de búsqueda */}
+            <button className="btn btn-link text-dark p-0">
+              <IoIosSearch size={20} />
+            </button>
+
+            {/* Carrito con contador */}
+            <Link to="/carrito" className="position-relative text-dark">
+              <BsCart3 size={20} />
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style={{ fontSize: "0.6rem" }}>
+                2
+              </span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
+
+
+

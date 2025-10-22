@@ -1,58 +1,69 @@
-
 export default function Footer() {
-  
   return (
-    <footer className="w-100 border-top mt-5 pt-5" style={{ backgroundColor: "#f8f9fa", fontSize: "13px" }}>
-     
-      <div className="container mb-4">
-        <div className="row text-center text-md-start">
-          <div className="col-12 col-md-4 mb-4 mb-md-0 d-flex flex-column align-items-center">
-            <i className="bi bi-credit-card mb-2" style={{ fontSize: "2rem", color: "#3483fa" }}></i>
-            <h6 className="fw-bold">Paga con Mercado Pago</h6>
-            <p className="text-muted small text-center text-md-start px-2">
-              Usa Mercado Pago, la solución de Mercado Libre para pagar de forma segura y con el medio de pago que prefieras.
-            </p>
-            
-          </div>
+    <footer
+      className="text-white py-5"
+      style={{ backgroundColor: "#000", fontSize: "0.9rem" }}
+    >
+      <div className="container">
+        {/* --- Iconos sociales --- */}
+        <div className="d-flex justify-content-center mb-3">
+          <i className="bi bi-facebook mx-2 fs-5"></i>
+          <i className="bi bi-telegram mx-2 fs-5"></i>
+          <i className="bi bi-instagram mx-2 fs-5"></i>
+          <i className="bi bi-pinterest mx-2 fs-5"></i>
+        </div>
 
-          <div className="col-12 col-md-4 mb-4 mb-md-0 d-flex flex-column align-items-center">
-            <i className="bi bi-truck mb-2" style={{ fontSize: "2rem", color: "#3483fa" }}></i>
-            <h6 className="fw-bold">Envío gratis desde S/ 100so</h6>
-            <p className="text-muted small text-center text-md-start px-2">
-              Compra con envíos de Mercado Libre y disfruta de envíos gratis en miles de productos.
-            </p>
-           
-          </div>
+        {/* --- Enlaces del menú + botón --- */}
+        <div className="d-flex flex-column flex-md-row justify-content-center align-items-center mb-4">
+          <ul className="list-inline mb-3 mb-md-0 text-center text-md-start">
+            <li className="list-inline-item mx-3">
+              <a href="#" className="text-white text-decoration-none">
+                About
+              </a>
+            </li>
+            <li className="list-inline-item mx-3">
+              <a href="#" className="text-white text-decoration-none">
+                Features
+              </a>
+            </li>
+            <li className="list-inline-item mx-3">
+              <a href="#" className="text-white text-decoration-none">
+                Pricing
+              </a>
+            </li>
+            <li className="list-inline-item mx-3">
+              <a href="#" className="text-white text-decoration-none">
+                Gallery
+              </a>
+            </li>
+            <li className="list-inline-item mx-3">
+              <a href="#" className="text-white text-decoration-none">
+                Team
+              </a>
+            </li>
+          </ul>
 
-          <div className="col-12 col-md-4 d-flex flex-column align-items-center">
-            <i className="bi bi-shield-lock mb-2" style={{ fontSize: "2rem", color: "#3483fa" }}></i>
-            <h6 className="fw-bold">Seguridad, de principio a fin</h6>
-            <p className="text-muted small text-center text-md-start px-2">
-              ¿No te gusta? ¡Devuélvelo! En Mercado Libre, estás siempre protegido.
-            </p>
-            
+          {/* Botón "Contáctanos" alineado al final */}
+          <div className="ms-md-4">
+            <button
+              className="btn btn-light rounded-pill px-4"
+              style={{ fontWeight: "500" }}
+            >
+              Contáctanos
+            </button>
           </div>
         </div>
-      </div>
 
-      
-      <div className="border-top pt-3 px-4 pb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-muted">
-        <div>
-          <a href="#" style={{ color: "#3483fa" }}>
-            Cómo cuidamos tu privacidad
-          </a>{" "}
-          - Copyright © 1999–2025 MercadoLibre Perú S.R.L.
-        </div>
-        <div className="text-md-end">
-          Protegido por reCAPTCHA -{" "}
-          <a href="#" style={{ color: "#3483fa" }}>
-            Privacidad
-          </a>{" "}
-          -{" "}
-          <a href="#" style={{ color: "#3483fa" }}>
-            Condiciones
-          </a>
-        </div>
+        {/* --- Línea separadora --- */}
+        <hr
+          className="border-light opacity-25 mb-3"
+          style={{ width: "95%", margin: "0 auto" }}
+        />
+
+        {/* --- Texto final --- */}
+        <p className="text-muted small text-center mb-0">
+          © 2025 SEBILAZA | Equipos de ventilación y aire acondicionado
+        </p>
       </div>
     </footer>
   );

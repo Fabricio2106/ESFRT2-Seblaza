@@ -11,13 +11,28 @@ export default function Carousel() {
     >
       <div className="carousel-inner">
         <div className="carousel-item active">
-          <img src={slide1} className="d-block w-100 carousel-img" alt="Slide 1" />
+          <img
+            src={slide1}
+            className="d-block w-100"
+            alt="Slide 1"
+            style={{ height: "380px", objectFit: "cover" }}
+          />
         </div>
         <div className="carousel-item">
-          <img src={slide2} className="d-block w-100 carousel-img" alt="Slide 2" />
+          <img
+            src={slide2}
+            className="d-block w-100"
+            alt="Slide 2"
+            style={{ height: "380px", objectFit: "cover" }}
+          />
         </div>
         <div className="carousel-item">
-          <img src={slide3} className="d-block w-100 carousel-img" alt="Slide 3" />
+          <img
+            src={slide3}
+            className="d-block w-100"
+            alt="Slide 3"
+            style={{ height: "380px", objectFit: "cover" }}
+          />
         </div>
       </div>
       <button
@@ -41,3 +56,5 @@ export default function Carousel() {
     </div>
   );
 }
+
+

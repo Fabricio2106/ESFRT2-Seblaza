@@ -1,32 +1,81 @@
 import Carousel from "../components/subcomponents/carousel";
 import { Link } from "react-router-dom";
-import productos,{monitores} from "../data/productos";
-import bannerCupones from "../assets/img/banner_descuento.webp";
-
+import productos, { comentarios } from "../data/productos";
 
 export default function Home() {
   return (
     <>
       <Carousel />
 
-   
-      <section className="container-xl mt-3">
-        <div className="row justify-content-center row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+      {/* --- Productos --- */}
+      <section className="container-xl mt-5">
+        <div className="d-flex justify-content-end mb-3">
+          <Link
+            to="/productos"
+            className="text-primary text-decoration-none fw-semibold"
+            style={{ fontSize: "0.9rem" }}
+          >
+            See All New Products
+          </Link>
+        </div>
+
+        <div className="row justify-content-center row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
           {productos.map((producto) => (
             <div className="col d-flex justify-content-center" key={producto.id}>
-              <Link to={`/producto/${producto.id}`} className="text-decoration-none w-100" style={{ maxWidth: "230px" }}>
-                <div className="card card-hover h-100 text-center p-2" style={{ fontSize: "0.9rem" }}>
-                  <h6 className="fw-bold">Visto Recientemente</h6>
+              <Link
+                to={`/producto/${producto.id}`}
+                className="text-decoration-none text-dark"
+                style={{ width: "200px" }}
+              >
+                <div
+                  className="card shadow-sm border-0 text-center p-2 h-100"
+                  style={{
+                    transition: "0.3s",
+                    fontSize: "0.9rem",
+                  }}
+                >
                   <img
                     src={producto.imagen}
-                    className="card-img-top"
+                    className="card-img-top mx-auto"
                     alt={producto.nombre}
-                    style={{ height: "150px", objectFit: "contain" }}
+                    style={{
+                      height: "140px",
+                      objectFit: "contain",
+                      marginBottom: "10px",
+                    }}
                   />
-                  <div className="card-body d-flex flex-column justify-content-between">
-                    <h6 className="card-title">{producto.nombre}</h6>
-                    <p className="card-text fw-bold">S/. {producto.precio}</p>
-                    <span style={{ color: "#138C2B" }}>Envío gratis</span>
+
+                  <div className="card-body p-0">
+                    <h6 className="text-muted mb-1" style={{ minHeight: "40px" }}>
+                      {producto.nombre.length > 60
+                        ? producto.nombre.slice(0, 60) + "..."
+                        : producto.nombre}
+                    </h6>
+
+                    <div
+                      style={{
+                        color: "#FFD700",
+                        fontSize: "0.9rem",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {[...Array(producto.estrellas)].map((_, i) => (
+                        <span key={i}>⭐</span>
+                      ))}
+                      <span
+                        className="text-muted ms-1"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        (4)
+                      </span>
+                    </div>
+
+                    <div>
+                      <p className="text-muted text-decoration-line-through mb-1">
+                        S/. 499.00
+                      </p>
+                      <p className="fw-bold fs-6 mb-1">S/. 499.00</p>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -35,52 +84,63 @@ export default function Home() {
         </div>
       </section>
 
-      
-      <div
-        style={{
-          width: "100%",
-          marginTop: "35px",
-          marginBottom: "20px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <img
-          src={bannerCupones}
-          alt="Cupones bancarios"
-          style={{
-            width: "100%",
-            maxWidth: "1200px",
-            borderRadius: "10px",
-            padding: "0 20px",
-            boxSizing: "border-box",
-          }}
-        />
-      </div>
+      {/*  Sección de nuestros clientes  */}
+      <section className="container-xl mt-5 mb-5">
+        <h2 className="fw-bold text-center mb-5" style={{ fontSize: "2rem" }}>
+          De <span className="text-dark">nuestros Clientes</span>
+        </h2>
 
-     
-      <section className="container-xl mt-5">
-        <h4 className="fw-bold mb-4 text-center text-md-start">
-          OFERTAS EN MONITORES DESDE S/199 🥳🥳🤑
-        </h4>
-        <div className="row justify-content-center row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-          {monitores.map((monitor) => (
-            <div className="col d-flex justify-content-center" key={monitor.id}>
-              <Link to={`/producto/${monitor.id}`} className="text-decoration-none w-100" style={{ maxWidth: "230px" }}>
-                <div className="card card-hover h-100 text-center p-2" style={{ fontSize: "0.9rem" }}>
+        <div className="row justify-content-center row-cols-1 row-cols-md-3 g-4">
+          {comentarios.map((c) => (
+            <div className="col d-flex justify-content-center" key={c.id}>
+              <div
+                className="card shadow-sm border-0 p-4 position-relative"
+                style={{
+                  maxWidth: "350px",
+                  minHeight: "330px",
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                }}
+              >
+                <div className="d-flex align-items-center mb-3">
                   <img
-                    src={monitor.imagen}
-                    className="card-img-top"
-                    alt={monitor.nombre}
-                    style={{ height: "150px", objectFit: "contain" }}
+                    src={c.imagen}
+                    alt={c.nombre}
+                    className="rounded-circle me-3"
+                    style={{ width: "60px", height: "60px", objectFit: "cover" }}
                   />
-                  <div className="card-body d-flex flex-column justify-content-between">
-                    <h6 className="card-title">{monitor.nombre}</h6>
-                    <p className="card-text fw-bold">S/. {monitor.precio}</p>
-                    <span style={{ color: "#138C2B" }}>Envío gratis</span>
+                  <div className="text-start">
+                    <h6 className="fw-bold mb-0">{c.nombre}</h6>
+                    <small className="text-muted">{c.cargo}</small>
+                    <div style={{ color: "#FFD700", fontSize: "0.9rem" }}>
+                      {[...Array(c.estrellas)].map((_, i) => (
+                        <span key={i}>⭐</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </Link>
+
+                <p
+                  className="text-muted mb-0"
+                  style={{ fontSize: "0.95rem", textAlign: "justify" }}
+                >
+                  {c.comentario}
+                </p>
+
+                {/* Comillas decorativas */}
+                <div
+                  className="position-absolute"
+                  style={{
+                    bottom: "10px",
+                    right: "15px",
+                    fontSize: "2.5rem",
+                    fontWeight: "bold",
+                    color: c.colorCita || "#E63946",
+                  }}
+                >
+                  {c.id % 2 === 0 ? "”" : "“"}
+                </div>
+              </div>
             </div>
           ))}
         </div>

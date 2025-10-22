@@ -6,102 +6,136 @@ import card5 from "../assets/img/card-5.webp";
 import card6 from "../assets/img/card6.webp";
 import card7 from "../assets/img/card7.webp";
 import card8 from "../assets/img/card8.webp";
-import monitor1 from "../assets/img/monitor1.webp";
-import monitor2 from "../assets/img/monitor2.webp";
-import monitor3 from "../assets/img/monitor3.webp";
-import monitor4 from "../assets/img/monitor4.webp";
+import comentario1 from "..//assets/img/comentario1.webp";
+import comentario2 from "../assets/img/comentario2.webp";
+import comentario3 from "../assets/img/comentario3.webp";
 
+// 🛍️ Productos
 const productos = [
   {
     id: "1",
-    nombre: "Adaptador Ugreen 5 en 1",
-    precio: 626,
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card1,
-    descripcion: "Un adaptador compacto y versátil.",
+    descripcion: "",
+    estrellas: 5,
   },
   {
     id: "2",
-    nombre: "Tablet Lenovo Idea Pro 12,7 + Teclado Y Lápiz",
-    precio: 1719,
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card2,
-    descripcion: "Tablet profesional ideal para productividad.",
+    descripcion: "",
+    estrellas: 5,
   },
   {
     id: "3",
-    nombre: "Parlante 2.1 bluetooth creative Stage",
-    precio: 626,
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card3,
-    descripcion: "Sonido potente con conectividad Bluetooth.",
+    descripcion: "",
+    estrellas: 5,
   },
   {
     id: "4",
-    nombre: 'Monitor LG 27GS60QC-B 27" QHd+',
-    precio: 829,
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card4,
-    descripcion: "Monitor con excelente resolución para gaming.",
+    descripcion: "",
+    estrellas: 5,
   },
   {
     id: "5",
-    nombre: "Mouse Logitech Signature M650 Silent Inalámbrico Rosa",
-    precio: 149,
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card5,
-    descripcion: "Mouse ergonómico, silencioso y cómodo, ideal para uso diario.",
+    descripcion: "",
+    estrellas: 5,
   },
   {
-    id:"6",
-    nombre:"Teclado Mecánico Redragon Kumara K552",
-    precio:120,
+    id: "6",
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
     imagen: card6,
-    descripcion:"Teclado compacto con switches rojos",
+    descripcion: "",
+    estrellas: 5,
   },
   {
-    id:"7",
-    nombre:"Audífonos Gamer HyperX Cloud II",
-    precio: 300,
-    imagen:card7,
-    descripcion:"Sonido envolvente con micrófono incluido.",
+    id: "7",
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
+    imagen: card7,
+    descripcion: "",
+    estrellas: 5,
   },
   {
-    id:"8",
-    nombre:"Mac book air chip M1",
-    precio:3800,
-    imagen:card8,
-    descripcion:"Su innovador chip M1 ofrece un rendimiento y una duración de batería excepcionales.",
-  }
-  
+    id: "8",
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
+    imagen: card8,
+    descripcion: "",
+    estrellas: 5,
+  },
+  {
+    id: "9",
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
+    imagen: card8,
+    descripcion: "",
+    estrellas: 5,
+  },
+  {
+    id: "10",
+    nombre:
+      "Extractor de baño Decor, de hasta 300 m3/h , con compuerta antiretorno",
+    precio: 499.0,
+    imagen: card8,
+    descripcion: "",
+    estrellas: 5,
+  },
+];
 
+// 💬 Comentarios 
+export const comentarios = [
+  {
+    id: 201,
+    nombre: "Jacob Jones",
+    cargo: "Photographer",
+    estrellas: 5,
+    imagen: comentario1, // coloca aquí tu ruta real
+    comentario:
+      "¡Excelente experiencia de compra! Encontré el ventilador industrial que necesitaba para mi oficina de manera rápida y sencilla. La página web es muy fácil de navegar, y los detalles de cada producto me ayudaron a tomar una decisión informada.",
+    colorCita: "#555",
+  },
+  {
+    id: 202,
+    nombre: "Robert Fox",
+    cargo: "Manager",
+    estrellas: 5,
+    imagen: comentario2,
+    comentario:
+      "Gran variedad de productos de ventilación, y todo a precios accesibles. Compré un aire acondicionado para mi casa, y el proceso fue súper rápido. Me encantó que pudieran recomendarme el producto adecuado según el tamaño de mi habitación.",
+    colorCita: "#E63946",
+  },
+  {
+    id: 203,
+    nombre: "Wade Warren",
+    cargo: "Arquitecto",
+    estrellas: 5,
+    imagen: comentario3,
+    comentario:
+      "Soy arquitecto y me encanta la calidad de los productos que ofrece esta tienda online. He comprado varios ventiladores industriales para un proyecto grande, y cada uno ha superado mis expectativas.",
+    colorCita: "#555",
+  },
 ];
 
 export default productos;
-
-
-export const monitores = [
-  {
-    id: 101,
-    nombre: "Monitor Teros Plano Te2128s 21.5",
-    precio: 220,
-    imagen: monitor1,
-    descripcion:"eleva tu experiencia de juego al siguiente nivel"
-  },
-  {
-    id:102,
-    nombre:"Monitor Gamer Teros con pantalla de 21.45 y resolución Full HD",
-    precio:274,
-    imagen:monitor2,
-    descripcion:"Con resolución Full HD (1920 px x 1080 px)"
-  },
-  {
-    id:103,
-    nombre:"Monitor Gamer KTC con pantalla de 24 y resolución Full HD",
-    precio:270,
-    imagen:monitor3,
-    descripcion:"colores más precisos y mejores ángulos de visión gracias a la tecnología IPS."
-  },
-  {
-    id:104,
-    nombre:"Monitor Teros Te-2415s 24 Ips Full Hd 120hz 1ms Amd Freesync Color Negro",
-    precio:270,
-    imagen:monitor4,
-    descripcion:"experiencia visual avanzada"
-  }
-];
