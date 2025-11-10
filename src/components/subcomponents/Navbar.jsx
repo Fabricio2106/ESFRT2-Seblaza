@@ -49,6 +49,9 @@ export default function Navbar1() {
               <li className="nav-item">
                 <Link className="nav-link fw-semibold px-3" to="/aire-acondicionado">Aire acondicionado</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-semibold px-3" to="/contacto">Contacto</Link>
+              </li>
             </ul>
           </div>
 

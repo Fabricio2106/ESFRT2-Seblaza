@@ -8,6 +8,7 @@ import { Product } from "../pages/Product";
 import { Entrega } from "../pages/Entrega";
 import { Pago } from "../pages/Pago";
 import { DetallePago } from "../pages/DetallePago";
+import Contacto from "../pages/Contacto";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "producto/:id",
         element: <Product />,
+      },
+      {
+        path: "contacto",
+        element: <Contacto />,
       },
     ],
   },
