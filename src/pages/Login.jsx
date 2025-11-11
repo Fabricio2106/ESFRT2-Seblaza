@@ -15,7 +15,7 @@ export default function Login() {
               style={{ fontSize: "13px" }}
             >
               <BsShieldExclamation size={20} />
-              Tengo un problema de seguridad
+              .............
             </span>
             <span style={{ fontWeight: "bold", fontSize: "30px" }}>›</span>
           </button>
