@@ -1,8 +1,24 @@
 import Carousel from "../components/subcomponents/carousel";
 import { Link } from "react-router-dom";
-import productos, { comentarios } from "../data/productos";
+import { comentarios } from "../data/productos";
+import { useEffect, useState } from "react";
+import { supabase } from "../config/supaBaseConfig";
 
 export default function Home() {
+   const [productos, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data: productos, error } = await supabase
+        .from("productos")
+        .select("*");
+      if (error) console.error("Error", error);
+      else setProducts(productos);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <>
       <Carousel />
@@ -35,7 +51,7 @@ export default function Home() {
                   }}
                 >
                   <img
-                    src={producto.imagen}
+                    src={producto.img_url}
                     className="card-img-top mx-auto"
                     alt={producto.nombre}
                     style={{
@@ -51,7 +67,9 @@ export default function Home() {
                         ? producto.nombre.slice(0, 60) + "..."
                         : producto.nombre}
                     </h6>
-
+                        {/*
+                        
+                        
                     <div
                       style={{
                         color: "#FFD700",
@@ -69,7 +87,7 @@ export default function Home() {
                         (4)
                       </span>
                     </div>
-
+                */ }
                     <div>
                       <p className="text-muted text-decoration-line-through mb-1">
                         S/. 499.00
@@ -84,7 +102,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/*  Sección de nuestros clientes  */}
+       Sección de nuestros clientes  
       <section className="container-xl mt-5 mb-5">
         <h2 className="fw-bold text-center mb-5" style={{ fontSize: "2rem" }}>
           De <span className="text-dark">nuestros Clientes</span>
@@ -145,6 +163,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      
     </>
   );
 }
