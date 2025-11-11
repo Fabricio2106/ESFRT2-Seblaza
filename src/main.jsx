@@ -5,6 +5,7 @@ import router from "./router/AppRouter";
 import "./assets/css/variables.css";
 import "./assets/css/global.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 createRoot(document.getElementById("root")).render(
