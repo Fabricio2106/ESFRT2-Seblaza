@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../config/supaBaseConfig";
 
 export default function Home() {
-   const [productos, setProducts] = useState([]);
+  const [productos, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -67,9 +67,9 @@ export default function Home() {
                         ? producto.nombre.slice(0, 60) + "..."
                         : producto.nombre}
                     </h6>
-                        {/*
-                        
-                        
+                    {/*
+                    
+                    
                     <div
                       style={{
                         color: "#FFD700",
@@ -102,7 +102,7 @@ export default function Home() {
         </div>
       </section>
 
-       Sección de nuestros clientes  
+      {/* Sección de nuestros clientes */}
       <section className="container-xl mt-5 mb-5">
         <h2 className="fw-bold text-center mb-5" style={{ fontSize: "2rem" }}>
           De <span className="text-dark">nuestros Clientes</span>
@@ -163,7 +163,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-      
     </>
   );
 }
