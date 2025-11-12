@@ -55,6 +55,7 @@ export default function Navbar1() {
             </ul>
           </div>
 
+<<<<<<< Updated upstream
           {/* Sección derecha: cuenta, login, íconos */}
           <div className="d-flex align-items-center gap-3">
             <Link to="/crear-cuenta" className="text-dark text-decoration-none fw-semibold">Crea tu cuenta</Link>
@@ -64,6 +65,13 @@ export default function Navbar1() {
             <button className="btn btn-link text-dark p-0">
               <IoIosSearch size={20} />
             </button>
+=======
+          {/* Íconos derecha con espacio */}
+          <div className="d-flex align-items-center gap-4 ms-4">
+            <Link to="/ingreso" className="text-dark text-decoration-none">
+              <FaUser size={20} />
+            </Link>
+>>>>>>> Stashed changes
 
             {/* Carrito con contador */}
             <Link to="/carrito" className="position-relative text-dark">
