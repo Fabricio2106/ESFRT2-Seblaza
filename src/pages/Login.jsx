@@ -1,64 +1,130 @@
-import { FcGoogle } from "react-icons/fc";
-import { BsShieldExclamation } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
-    <section className="mx-auto" style={{ maxWidth: "960px", padding: "2rem" }}>
-      <div className="row mt-4">
-        <div className="col-12 col-md-6 d-flex align-items-start flex-column">
-          <h1 style={{ fontSize: "32px", fontWeight: "600" }}>
-            Ingresa tu e-mail o teléfono para iniciar sesión
-          </h1>
-          <button className="btn btn-custom4 mt-auto d-flex align-items-center justify-content-between border rounded px-3 py-1 gap-2">
-            <span
-              className="d-flex align-items-center gap-2"
-              style={{ fontSize: "13px" }}
-            >
-              <BsShieldExclamation size={20} />
-              .............
-            </span>
-            <span style={{ fontWeight: "bold", fontSize: "30px" }}>›</span>
-          </button>
-        </div>
-        <div className="col-12 col-md-6 ">
-          <form
-            className="d-flex flex-column justify-content-center"
+    <div>
+      <h2
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "600",
+          marginBottom: "2rem",
+          textAlign: "center",
+          color: "white",
+        }}
+      >
+        Login
+      </h2>
+
+      <form
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "2rem",
+          width: "100%",
+        }}
+      >
+        {/* Usuariooo */}
+        <div>
+          <label
             style={{
-              padding: "2rem",
-              rowGap: "10px",
-              border: "1px solid rgba(0,0,0,.1)",
+              fontSize: "0.9rem",
+              color: "#b3b3b3",
+              display: "block",
+              marginBottom: "5px",
             }}
           >
-            <div className="mb-4">
-              <label for="exampleInputEmail1" className="form-label">
-                Email o teléfono
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <button type="submit" className="btn btn-custom">
-              Continuar
-            </button>
-            <button type="submit" className="btn btn-custom2">
-              Crear cuenta
-            </button>
-            <button
-              type="submit"
-              className="btn btn-custom3  d-flex align-items-center position-relative mt-5"
-              style={{ justifyContent: "center" }}
-            >
-              <span className="position-absolute start-0 ms-3">
-                <FcGoogle size={22} />
-              </span>
-              <span>Iniciar sesión con Google</span>
-            </button>
-          </form>
+            Usuario
+          </label>
+          <input
+            type="text"
+            placeholder=""
+            style={{
+              width: "100%",
+              padding: "8px 0",
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "1px solid #555",
+              color: "white",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
         </div>
-      </div>
-    </section>
-  );
+
+        {/* Campo Contraseñaaa*/}
+        <div>
+          <label
+            style={{
+              fontSize: "0.9rem",
+              color: "#b3b3b3",
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Contraseña
+          </label>
+          <input
+            type="password"
+            placeholder=""
+            style={{
+              width: "100%",
+              padding: "8px 0",
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "1px solid #555",
+              color: "white",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
+        </div>
+
+        {/* Botón */}
+        <button
+          type="submit"
+          style={{
+            marginTop: "1rem",
+            backgroundColor: "#bcbcbc",
+            border: "none",
+            borderRadius: "25px",
+            color: "white",
+            fontWeight: "600",
+            padding: "12px 0",
+            cursor: "pointer",
+            transition: "0.3s",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = "#a6a6a6")}
+          onMouseOut={(e) => (e.target.style.backgroundColor = "#bcbcbc")}
+        >
+          Login
+        </button>
+
+        {/* Enlace */}
+        <p
+          style={{
+            fontSize: "0.85rem",
+            marginTop: "1rem",
+            color: "#b3b3b3",
+            textAlign: "center",
+          }}
+        >
+          ¿No tienes una cuenta?{" "}
+          <Link
+            to="/registro"
+            style={{
+              color: "#a073ff",
+              textDecoration: "none",
+              fontWeight: "500",
+              transition: "color 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = "#c8a4ff")}
+            onMouseLeave={(e) => (e.target.style.color = "#a073ff")}
+          >
+            Crear una
+          </Link>
+        </p>
+      </form>
+    </div>
+  );
 }

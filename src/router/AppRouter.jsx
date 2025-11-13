@@ -15,46 +15,25 @@ const router = createBrowserRouter([
     path: "/",
     element: <MainLayout />,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "producto/:id",
-        element: <Product />,
-      },
-      {
-        path: "contacto",
-        element: <Contacto />,
-      },
+      { index: true, element: <Home /> },
+      { path: "producto/:id", element: <Product /> },
+      { path: "contacto", element: <Contacto /> },
     ],
   },
   {
     path: "ingreso",
     element: <AuthLayout />,
     children: [
-      {
-        index: true,
-        element: <Login />,
-      },
+      { index: true, element: <Login /> },
     ],
   },
   {
     path: "producto/:id/entrega",
     element: <AuthLayout />,
     children: [
-      {
-        index: true,
-        element: <Entrega />,
-      },
-      {
-        path: "pago",
-        element: <Pago />,
-      },
-      {
-        path: "pago/detalle",
-        element: <DetallePago />,
-      },
+      { index: true, element: <Entrega /> },
+      { path: "pago", element: <Pago /> },
+      { path: "pago/detalle", element: <DetallePago /> },
     ],
   },
 ]);
