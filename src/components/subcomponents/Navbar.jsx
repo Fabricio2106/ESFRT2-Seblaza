@@ -39,7 +39,7 @@ export default function Navbar1() {
         </div>
       </div>
 
-      {/* Navbar principal con margen interno */}
+      {/* Navbar principal */}
       <nav className="navbar navbar-expand-lg bg-white shadow-sm">
         <div
           className="container d-flex align-items-center justify-content-between"
@@ -55,17 +55,16 @@ export default function Navbar1() {
             <RiBook2Fill size={34} className="me-2" />
           </Link>
 
-          {/* Menú centrado con separación */}
+          {/* Menú centrado */}
           <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul className="navbar-nav text-center d-flex align-items-center gap-4">
-              {/* HOME */}
               <li className="nav-item">
                 <Link className="nav-link fw-semibold px-3" to="/">
                   Home
                 </Link>
               </li>
 
-              {/* PRODUCTOS (menú desplegable) */}
+              {/* Productos */}
               <li className="nav-item dropdown">
                 <button
                   className="btn nav-link fw-semibold dropdown-toggle border-0 bg-transparent"
@@ -103,7 +102,6 @@ export default function Navbar1() {
                 </ul>
               </li>
 
-              {/* CONTACTO */}
               <li className="nav-item">
                 <Link className="nav-link fw-semibold px-3" to="/contacto">
                   Contacto
@@ -112,12 +110,15 @@ export default function Navbar1() {
             </ul>
           </div>
 
-          {/* Íconos derecha con espacio */}
+          {/* Íconos derecha */}
           <div className="d-flex align-items-center gap-4 ms-4">
-            <Link to="/perfil" className="text-dark text-decoration-none">
+
+            {/* Ícono de usuario (Inicio de sesión) */}
+            <Link to="/ingreso" className="text-dark text-decoration-none">
               <FaUser size={20} />
             </Link>
 
+            {/* Carrito */}
             <Link to="/carrito" className="position-relative text-dark">
               <BsCart3 size={20} />
               <span
