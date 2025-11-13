@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Registro() {
   return (
     <div>
       <h2
@@ -12,7 +12,7 @@ export default function Login() {
           color: "white",
         }}
       >
-        Login
+        Crear Cuenta
       </h2>
 
       <form
@@ -23,7 +23,7 @@ export default function Login() {
           width: "100%",
         }}
       >
-        {/* Usuariooo */}
+        {/* Usuario */}
         <div>
           <label
             style={{
@@ -51,7 +51,35 @@ export default function Login() {
           />
         </div>
 
-        {/* Campo Contraseñaaa*/}
+        {/* Email */}
+        <div>
+          <label
+            style={{
+              fontSize: "0.9rem",
+              color: "#b3b3b3",
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            placeholder=""
+            style={{
+              width: "100%",
+              padding: "8px 0",
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "1px solid #555",
+              color: "white",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
+        </div>
+
+        {/* Contraseña */}
         <div>
           <label
             style={{
@@ -97,10 +125,10 @@ export default function Login() {
           onMouseOver={(e) => (e.target.style.backgroundColor = "#a6a6a6")}
           onMouseOut={(e) => (e.target.style.backgroundColor = "#bcbcbc")}
         >
-          Login
+          Crear Cuenta
         </button>
 
-        {/* Enlace */}
+        {/* Enlace a Login */}
         <p
           style={{
             fontSize: "0.85rem",
@@ -109,23 +137,22 @@ export default function Login() {
             textAlign: "center",
           }}
         >
-          ¿No tienes una cuenta?{" "}
-        <Link
-            to="/ingreso/registro"
-              style={{
-                          color: "#a073ff",
-                          textDecoration: "none",
-                          fontWeight: "500",
-                          transition: "color 0.3s ease",
-                                  }}
-                                  onMouseEnter={(e) => (e.target.style.color = "#c8a4ff")}
-                                  onMouseLeave={(e) => (e.target.style.color = "#a073ff")}
-              >
-               Crear una
-              </Link>
-
+          ¿Ya tienes una cuenta?{" "}
+          <Link
+            to="/ingreso"
+            style={{
+              color: "#a073ff",
+              textDecoration: "none",
+              fontWeight: "500",
+              transition: "color 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = "#c8a4ff")}
+            onMouseLeave={(e) => (e.target.style.color = "#a073ff")}
+          >
+            Inicia sesión
+          </Link>
         </p>
       </form>
-    </div>
-  );
+    </div>
+  );
 }
