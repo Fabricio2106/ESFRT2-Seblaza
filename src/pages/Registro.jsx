@@ -1,6 +1,67 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 export default function Registro() {
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Validaciones básicas
+    if (!nombre || !email || !password) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, completa todos los campos",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "La contraseña debe tener al menos 6 caracteres",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await signUp(email, password, { nombre });
+
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear cuenta",
+        text: "No se pudo crear la cuenta",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (data) {
+      Swal.fire({
+        icon: "success",
+        title: "¡Cuenta creada!",
+        text: "Revisa tu correo para confirmar tu cuenta",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate("/ingreso");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div>
       <h2
@@ -16,6 +77,7 @@ export default function Registro() {
       </h2>
 
       <form
+        onSubmit={handleSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -38,6 +100,9 @@ export default function Registro() {
           <input
             type="text"
             placeholder=""
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "8px 0",
@@ -66,6 +131,9 @@ export default function Registro() {
           <input
             type="email"
             placeholder=""
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "8px 0",
@@ -94,6 +162,9 @@ export default function Registro() {
           <input
             type="password"
             placeholder=""
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "8px 0",
@@ -110,22 +181,23 @@ export default function Registro() {
         {/* Botón */}
         <button
           type="submit"
+          disabled={loading}
           style={{
             marginTop: "1rem",
-            backgroundColor: "#bcbcbc",
+            backgroundColor: loading ? "#666" : "#bcbcbc",
             border: "none",
             borderRadius: "25px",
             color: "white",
             fontWeight: "600",
             padding: "12px 0",
-            cursor: "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             transition: "0.3s",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#a6a6a6")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#bcbcbc")}
+          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#a6a6a6")}
+          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#bcbcbc")}
         >
-          Crear Cuenta
+          {loading ? "Creando cuenta..." : "Crear Cuenta"}
         </button>
 
         {/* Enlace a Login */}
