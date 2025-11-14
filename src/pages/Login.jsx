@@ -1,6 +1,56 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Validaciones básicas
+    if (!email || !password) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, completa todos los campos",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await signIn(email, password);
+
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al iniciar sesión",
+        text: "Credenciales incorrectas",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (data) {
+      Swal.fire({
+        icon: "success",
+        title: "¡Bienvenido!",
+        text: "Has iniciado sesión correctamente",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      navigate("/");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div>
       <h2
@@ -16,6 +66,7 @@ export default function Login() {
       </h2>
 
       <form
+        onSubmit={handleSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -23,7 +74,7 @@ export default function Login() {
           width: "100%",
         }}
       >
-        {/* Usuariooo */}
+        {/* Email */}
         <div>
           <label
             style={{
@@ -33,11 +84,14 @@ export default function Login() {
               marginBottom: "5px",
             }}
           >
-            Usuario
+            Email
           </label>
           <input
-            type="text"
+            type="email"
             placeholder=""
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "8px 0",
@@ -51,7 +105,7 @@ export default function Login() {
           />
         </div>
 
-        {/* Campo Contraseñaaa*/}
+        {/* Campo Contraseña */}
         <div>
           <label
             style={{
@@ -66,6 +120,9 @@ export default function Login() {
           <input
             type="password"
             placeholder=""
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "8px 0",
@@ -82,22 +139,23 @@ export default function Login() {
         {/* Botón */}
         <button
           type="submit"
+          disabled={loading}
           style={{
             marginTop: "1rem",
-            backgroundColor: "#bcbcbc",
+            backgroundColor: loading ? "#666" : "#bcbcbc",
             border: "none",
             borderRadius: "25px",
             color: "white",
             fontWeight: "600",
             padding: "12px 0",
-            cursor: "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             transition: "0.3s",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#a6a6a6")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#bcbcbc")}
+          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#a6a6a6")}
+          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#bcbcbc")}
         >
-          Login
+          {loading ? "Cargando..." : "Login"}
         </button>
 
         {/* Enlace */}
@@ -126,6 +184,6 @@ export default function Login() {
 
         </p>
       </form>
-    </div>
-  );
+    </div>
+  );
 }

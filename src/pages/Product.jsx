@@ -8,8 +8,8 @@ export const Product = () => {
 
   // Convertimos id a número para comparar correctamente
   const producto =
-    productos.find((p) => p.id.toString() === id) ||
-    monitores.find((m) => m.id.toString() === id);
+    productos.find((p) => p.id.toString() === id)
+    //monitores.find((m) => m.id.toString() === id);
 
   if (!producto) {
     return <h2>Producto no encontrado</h2>;
