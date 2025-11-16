@@ -6,8 +6,8 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import { Product } from "../pages/Product";
 import { Entrega } from "../pages/Entrega";
-import { Pago } from "../pages/Pago";
-import { DetallePago } from "../pages/DetallePago";
+//import { Pago } from "../pages/Pago";
+//import { DetallePago } from "../pages/DetallePago";
 import Contacto from "../pages/Contacto";
 
 const router = createBrowserRouter([
@@ -32,8 +32,8 @@ const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       { index: true, element: <Entrega /> },
-      { path: "pago", element: <Pago /> },
-      { path: "pago/detalle", element: <DetallePago /> },
+      //{ path: "pago", element: <Pago /> },
+      //{ path: "pago/detalle", element: <DetallePago /> },
     ],
   },
 ]);

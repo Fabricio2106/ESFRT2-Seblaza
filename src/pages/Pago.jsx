@@ -1,4 +1,4 @@
-import productos from "../data/productos";
+{/*import productos from "../data/productos";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -93,4 +93,4 @@ export const Pago = () => {
       </div>
     </div>
   );
-};
+*/}

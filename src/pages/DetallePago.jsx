@@ -1,4 +1,4 @@
-import productos from "../data/productos";
+{/*import productos from "../data/productos";
 import { useParams, Link } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaCarSide } from "react-icons/fa";
@@ -95,3 +95,4 @@ export const DetallePago = () => {
     </div>
   );
 };
+*/}
