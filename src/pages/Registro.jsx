@@ -1,23 +1,22 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import Swal from "sweetalert2";
 
-export default function Login() {
+export default function Registro() {
+  const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     // Validaciones básicas
-    if (!email || !password) {
+    if (!nombre || !email || !password) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -27,13 +26,23 @@ export default function Login() {
       return;
     }
 
-    const { data, error } = await signIn(email, password);
+    if (password.length < 6) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "La contraseña debe tener al menos 6 caracteres",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await signUp(email, password, { nombre });
 
     if (error) {
       Swal.fire({
         icon: "error",
-        title: "Error al iniciar sesión",
-        text: "Credenciales incorrectas",
+        title: "Error al crear cuenta",
+        text: "No se pudo crear la cuenta",
       });
       setLoading(false);
       return;
@@ -42,18 +51,12 @@ export default function Login() {
     if (data) {
       Swal.fire({
         icon: "success",
-        title: "¡Bienvenido!",
-        text: "Has iniciado sesión correctamente",
-        timer: 1500,
+        title: "¡Cuenta creada!",
+        text: "Revisa tu correo para confirmar tu cuenta",
+        timer: 2000,
         showConfirmButton: false,
       });
-      
-      // Redirigir a la página solicitada o al inicio
-      if (redirect) {
-        navigate(redirect);
-      } else {
-        navigate("/");
-      }
+      navigate("/ingreso");
     }
 
     setLoading(false);
@@ -70,7 +73,7 @@ export default function Login() {
           color: "white",
         }}
       >
-        Login
+        Crear Cuenta
       </h2>
 
       <form
@@ -82,6 +85,37 @@ export default function Login() {
           width: "100%",
         }}
       >
+        {/* Usuario */}
+        <div>
+          <label
+            style={{
+              fontSize: "0.9rem",
+              color: "#b3b3b3",
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Usuario
+          </label>
+          <input
+            type="text"
+            placeholder=""
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            disabled={loading}
+            style={{
+              width: "100%",
+              padding: "8px 0",
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "1px solid #555",
+              color: "white",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
+        </div>
+
         {/* Email */}
         <div>
           <label
@@ -113,7 +147,7 @@ export default function Login() {
           />
         </div>
 
-        {/* Campo Contraseña */}
+        {/* Contraseña */}
         <div>
           <label
             style={{
@@ -150,7 +184,7 @@ export default function Login() {
           disabled={loading}
           style={{
             marginTop: "1rem",
-            backgroundColor: loading ? "#890404ff" : "#890404ff",
+            backgroundColor: loading ? "#666" : "#bcbcbc",
             border: "none",
             borderRadius: "25px",
             color: "white",
@@ -160,13 +194,13 @@ export default function Login() {
             transition: "0.3s",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
           }}
-          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#000000ff")}
-          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#890404ff")}
+          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#a6a6a6")}
+          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#bcbcbc")}
         >
-          {loading ? "Cargando..." : "Login"}
+          {loading ? "Creando cuenta..." : "Crear Cuenta"}
         </button>
 
-        {/* Enlace */}
+        {/* Enlace a Login */}
         <p
           style={{
             fontSize: "0.85rem",
@@ -175,21 +209,20 @@ export default function Login() {
             textAlign: "center",
           }}
         >
-          ¿No tienes una cuenta?{" "}
-        <Link
-            to="/ingreso/registro"
-              style={{
-                          color: "#a073ff",
-                          textDecoration: "none",
-                          fontWeight: "500",
-                          transition: "color 0.3s ease",
-                                  }}
-                                  onMouseEnter={(e) => (e.target.style.color = "#c8a4ff")}
-                                  onMouseLeave={(e) => (e.target.style.color = "#a073ff")}
-              >
-               Crear una
-              </Link>
-
+          ¿Ya tienes una cuenta?{" "}
+          <Link
+            to="/ingreso"
+            style={{
+              color: "#a073ff",
+              textDecoration: "none",
+              fontWeight: "500",
+              transition: "color 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = "#c8a4ff")}
+            onMouseLeave={(e) => (e.target.style.color = "#a073ff")}
+          >
+            Inicia sesión
+          </Link>
         </p>
       </form>
     </div>

@@ -1,16 +1,48 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaUser } from "react-icons/fa";
 import { RiBook2Fill } from "react-icons/ri";
 import { BsCart3 } from "react-icons/bs";
 import { useEffect } from "react";
 import * as bootstrap from "bootstrap";
+import { useAuth } from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 export default function Navbar1() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Inicializa los dropdowns de Bootstrap (necesario en React + Vite)
     const dropdownElementList = [].slice.call(document.querySelectorAll(".dropdown-toggle"));
     dropdownElementList.map((dropdownToggleEl) => new bootstrap.Dropdown(dropdownToggleEl));
   }, []);
+
+  const handleSignOut = async () => {
+    const result = await Swal.fire({
+      title: "¿Cerrar sesión?",
+      text: "¿Estás seguro de que quieres cerrar sesión?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      const { error } = await signOut();
+      if (!error) {
+        Swal.fire({
+          icon: "success",
+          title: "Sesión cerrada",
+          text: "Has cerrado sesión correctamente",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        navigate("/");
+      }
+    }
+  };
 
   return (
     <>
@@ -52,8 +84,10 @@ export default function Navbar1() {
         >
           {/* Logo */}
           <Link className="navbar-brand text-primary d-flex align-items-center me-4" to="/">
-            <RiBook2Fill size={34} className="me-2" />
+            {/* <RiBook2Fill size={34} className="me-2" /> */}
+            <img src="../../../public/logo-seblaza.webp" alt="Seblaza Logo" style={{ height: "50px" }} />
           </Link>
+            
 
           {/* Menú centrado */}
           <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -111,12 +145,66 @@ export default function Navbar1() {
           </div>
 
           {/* Íconos derecha */}
+          {/* Íconos derecha */}
           <div className="d-flex align-items-center gap-4 ms-4">
 
             {/* Ícono de usuario (Inicio de sesión) */}
-            <Link to="/ingreso" className="text-dark text-decoration-none">
-              <FaUser size={20} />
-            </Link>
+            {user ? (
+              <div className="dropdown">
+                <button
+                  className="btn d-flex align-items-center gap-2 text-dark text-decoration-none border-0 bg-transparent dropdown-toggle"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ padding: 0 }}
+                >
+                  <FaUser size={20} />
+                  <span className="fw-semibold" style={{ fontSize: "0.95rem" }}>
+                    {user.user_metadata?.nombre || user.email.split("@")[0]}
+                  </span>
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-end border-0 shadow-sm"
+                  aria-labelledby="userDropdown"
+                  style={{ minWidth: "200px" }}
+                >
+                  <li>
+                    <div className="dropdown-item-text">
+                      <small className="text-muted">Conectado como:</small>
+                      <div className="fw-semibold">{user.email}</div>
+                    </div>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/perfil">
+                      Mi Perfil
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/mis-pedidos">
+                      Mis Pedidos
+                    </Link>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <button className="dropdown-item text-danger" onClick={handleSignOut}>
+                      Cerrar Sesión
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <Link to="/ingreso" className="text-dark text-decoration-none d-flex align-items-center gap-2">
+                <FaUser size={20} />
+                <span className="fw-semibold" style={{ fontSize: "0.95rem" }}>
+                  Iniciar Sesión
+                </span>
+              </Link>
+            )}
 
             {/* Carrito */}
             <Link to="/carrito" className="position-relative text-dark">

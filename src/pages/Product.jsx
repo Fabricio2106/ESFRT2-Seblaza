@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../config/supaBaseConfig";
+import { useAuth } from "../hooks/useAuth";
 
 export const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +32,17 @@ export const Product = () => {
     fetchProducto();
   }, [id]);
 
-  if (loading) {
+  const handleComprarAhora = () => {
+    if (!user) {
+      // Si no hay usuario, redirigir al login con el producto como parámetro de retorno
+      navigate(`/ingreso?redirect=/producto/${id}/comprar`);
+    } else {
+      // Si hay usuario, ir directamente a comprar
+      navigate(`/producto/${id}/comprar`);
+    }
+  };
+
+  if (loading || authLoading) {
     return (
       <div className="container text-center py-5">
         <div className="spinner-border text-primary" role="status">
@@ -181,20 +194,21 @@ export const Product = () => {
               {/* Botones de acción */}
               <div className="d-grid gap-3">
                 <button 
-                  className="btn btn-custom btn-lg py-3"
+                  onClick={handleComprarAhora}
+                  className={`btn btn-custom btn-lg py-3 ${producto.stock === 0 ? 'disabled' : ''}`}
                   disabled={producto.stock === 0}
                 >
                   <i className="bi bi-lightning-fill me-2"></i>
                   Comprar Ahora
                 </button>
                 
-                <button 
-                  className="btn btn-outline-primary btn-lg py-3"
-                  disabled={producto.stock === 0}
+                <Link 
+                  to="/carrito"
+                  className={`btn btn-outline-primary btn-lg py-3 ${producto.stock === 0 ? 'disabled' : ''}`}
                 >
                   <i className="bi bi-cart-plus me-2"></i>
                   Agregar al Carrito
-                </button>
+                </Link>
               </div>
 
               {/* Información adicional */}
