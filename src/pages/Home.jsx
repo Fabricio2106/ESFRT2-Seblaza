@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../config/supaBaseConfig";
 
 export default function Home() {
-  const [productos, setProducts] = useState([]);
+  //const [productos, setProducts] = useState([]);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [productosOferta, setProductosOferta] = useState([]);
   const [productosNormales, setProductosNormales] = useState([]);
@@ -19,7 +19,7 @@ export default function Home() {
         .select("*");
       if (error) console.error("Error", error);
       else {
-        setProducts(productos);
+        //setProducts(productos);
         setProductosFiltrados(productos);
         // Filtrar productos en oferta
         const ofertas = productos.filter(p => p.estado === "oferta");

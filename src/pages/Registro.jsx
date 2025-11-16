@@ -184,7 +184,7 @@ export default function Registro() {
           disabled={loading}
           style={{
             marginTop: "1rem",
-            backgroundColor: loading ? "#666" : "#bcbcbc",
+            backgroundColor: loading ? "#890404ff" : "#890404ff",
             border: "none",
             borderRadius: "25px",
             color: "white",
@@ -194,8 +194,8 @@ export default function Registro() {
             transition: "0.3s",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
           }}
-          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#a6a6a6")}
-          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#bcbcbc")}
+          onMouseOver={(e) => !loading && (e.target.style.backgroundColor = "#000000ff")}
+          onMouseOut={(e) => !loading && (e.target.style.backgroundColor = "#890404ff")}
         >
           {loading ? "Creando cuenta..." : "Crear Cuenta"}
         </button>
