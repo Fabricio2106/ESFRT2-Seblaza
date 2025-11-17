@@ -54,7 +54,7 @@ export default function Navbar1() {
               Lun-Vie: <strong>8:00 AM - 5:30 PM</strong>
             </span>
             <span>
-              Visítanos en <strong>1234 Street Address City Address, 1234</strong>
+              Visítanos en <strong>San Martín de Porres, Av. Perú 123</strong>
             </span>
           </div>
           <div className="d-flex align-items-center mt-2 mt-md-0">
