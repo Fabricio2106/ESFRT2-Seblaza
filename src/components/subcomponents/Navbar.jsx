@@ -85,7 +85,7 @@ export default function Navbar1() {
           {/* Logo */}
           <Link className="navbar-brand text-primary d-flex align-items-center me-4" to="/">
             {/* <RiBook2Fill size={34} className="me-2" /> */}
-            <img src="../../../public/logo-seblaza.webp" alt="Seblaza Logo" style={{ height: "50px" }} />
+            <img src="/logo-seblaza.webp" alt="Seblaza Logo" style={{ height: "50px" }} />
           </Link>
             
 
