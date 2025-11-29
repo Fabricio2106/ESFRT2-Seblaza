@@ -1,4 +1,5 @@
 import { useState } from "react";
+import emailjs from '@emailjs/browser';
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,9 @@ export default function Contacto() {
     asunto: "",
     mensaje: "",
   });
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' });
 
   const handleChange = (e) => {
     setFormData({
@@ -16,19 +20,53 @@ export default function Contacto() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar el formulario
-    console.log("Datos del formulario:", formData);
-    alert("¡Mensaje enviado! Nos pondremos en contacto contigo pronto.");
-    // Resetear formulario
-    setFormData({
-      nombre: "",
-      email: "",
-      telefono: "",
-      asunto: "",
-      mensaje: "",
-    });
+    setIsLoading(true);
+    setStatus({ type: '', message: '' });
+
+    try {
+      // Preparar los datos para EmailJS
+      const templateParams = {
+        from_name: formData.nombre,
+        from_email: formData.email,
+        phone: formData.telefono,
+        subject: formData.asunto,
+        message: formData.mensaje,
+      };
+
+      // Enviar email usando EmailJS
+      const response = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      if (response.status === 200) {
+        setStatus({
+          type: 'success',
+          message: '¡Mensaje enviado exitosamente! Nos pondremos en contacto contigo pronto.'
+        });
+        
+        // Resetear formulario
+        setFormData({
+          nombre: "",
+          email: "",
+          telefono: "",
+          asunto: "",
+          mensaje: "",
+        });
+      }
+    } catch (error) {
+      console.error('Error al enviar el mensaje:', error);
+      setStatus({
+        type: 'error',
+        message: 'Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -177,6 +215,16 @@ export default function Contacto() {
           <div className="col-lg-7">
             <div className="contact-form p-4 rounded shadow-sm bg-light">
               <h2 className="fw-bold mb-4">Envíanos un Mensaje</h2>
+              
+              {/* Mensajes de estado */}
+              {status.message && (
+                <div className={`alert ${status.type === 'success' ? 'alert-success' : 'alert-danger'} alert-dismissible fade show`} role="alert">
+                  <i className={`bi ${status.type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2`}></i>
+                  {status.message}
+                  <button type="button" className="btn-close" onClick={() => setStatus({ type: '', message: '' })}></button>
+                </div>
+              )}
+              
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
                   <div className="col-md-6">
@@ -191,6 +239,7 @@ export default function Contacto() {
                       value={formData.nombre}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                       placeholder="Tu nombre"
                     />
                   </div>
@@ -207,6 +256,7 @@ export default function Contacto() {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                       placeholder="tu@email.com"
                     />
                   </div>
@@ -222,6 +272,7 @@ export default function Contacto() {
                       name="telefono"
                       value={formData.telefono}
                       onChange={handleChange}
+                      disabled={isLoading}
                       placeholder="+51 999 888 777"
                     />
                   </div>
@@ -238,6 +289,7 @@ export default function Contacto() {
                       value={formData.asunto}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                       placeholder="¿En qué podemos ayudarte?"
                     />
                   </div>
@@ -254,6 +306,7 @@ export default function Contacto() {
                       value={formData.mensaje}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                       placeholder="Escribe tu mensaje aquí..."
                     ></textarea>
                   </div>
@@ -262,8 +315,19 @@ export default function Contacto() {
                     <button
                       type="submit"
                       className="btn btn-custom w-100 py-3 fw-semibold"
+                      disabled={isLoading}
                     >
-                      Enviar Mensaje
+                      {isLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Enviando...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bi bi-send-fill me-2"></i>
+                          Enviar Mensaje
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
