@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { MainLayout } from "../layout/MainLayout";
 import { AuthLayout } from "../layout/AuthLayout";
+import { ProtectedRoute } from "../components/ProtectedRoute";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -12,6 +13,9 @@ import Contacto from "../pages/Contacto";
 import Registro from "../pages/Registro";
 import ComprarAhora from "../pages/ComprarAhora";
 import Carrito from "../pages/Carrito";
+import MiPerfil from "../pages/MiPerfil";
+import MisPedidos from "../pages/MisPedidos";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +27,22 @@ const router = createBrowserRouter([
       { path: "producto/:id/comprar", element: <ComprarAhora /> },
       { path: "carrito", element: <Carrito /> },
       { path: "contacto", element: <Contacto /> },
+      { 
+        path: "mi-perfil", 
+        element: (
+          <ProtectedRoute>
+            <MiPerfil />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: "mis-pedidos", 
+        element: (
+          <ProtectedRoute>
+            <MisPedidos />
+          </ProtectedRoute>
+        ) 
+      },
     ],
   },
   {
@@ -41,6 +61,10 @@ const router = createBrowserRouter([
       //{ path: "pago", element: <Pago /> },
       //{ path: "pago/detalle", element: <DetallePago /> },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

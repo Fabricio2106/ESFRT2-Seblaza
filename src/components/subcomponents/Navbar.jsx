@@ -32,6 +32,7 @@ export default function Navbar1() {
     if (result.isConfirmed) {
       const { error } = await signOut();
       if (!error) {
+        navigate("/", { replace: true });
         Swal.fire({
           icon: "success",
           title: "Sesión cerrada",
@@ -39,7 +40,6 @@ export default function Navbar1() {
           timer: 1500,
           showConfirmButton: false,
         });
-        navigate("/");
       }
     }
   };
@@ -178,7 +178,7 @@ export default function Navbar1() {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/perfil">
+                    <Link className="dropdown-item" to="/mi-perfil">
                       Mi Perfil
                     </Link>
                   </li>
