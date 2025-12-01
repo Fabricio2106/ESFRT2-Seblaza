@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { usePedidos } from "../hooks/usePedidos";
+import { inicializarPedidosEjemplo } from "../utils/inicializarDatosPrueba";
 
 export default function MisPedidos() {
   const { pedidos, filtrarPorEstado, obtenerPedido } = usePedidos();
@@ -8,6 +9,11 @@ export default function MisPedidos() {
   const [mostrarModal, setMostrarModal] = useState(false);
 
   const pedidosFiltrados = filtrarPorEstado(filtroEstado);
+
+  const inicializarDatosPrueba = () => {
+    inicializarPedidosEjemplo();
+    window.location.reload();
+  };
 
   const obtenerEstadoColor = (estado) => {
     const colores = {
@@ -62,7 +68,21 @@ export default function MisPedidos() {
   return (
     <div className="mis-pedidos-page">
       <div className="container-xl py-5">
-        <h1 className="fw-bold mb-4">Mis Pedidos</h1>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="fw-bold mb-0">Mis Pedidos</h1>
+          
+          {/* Botón para inicializar datos de prueba (solo visible si no hay pedidos) */}
+          {pedidos.length === 0 && (
+            <button 
+              className="btn btn-outline-primary btn-sm"
+              onClick={inicializarDatosPrueba}
+              title="Crear pedidos de ejemplo para pruebas"
+            >
+              <i className="bi bi-database-add me-2"></i>
+              Cargar pedidos de ejemplo
+            </button>
+          )}
+        </div>
 
         {/* Estadísticas rápidas */}
         <div className="row g-3 mb-4">

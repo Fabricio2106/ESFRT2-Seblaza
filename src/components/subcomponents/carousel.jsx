@@ -1,6 +1,6 @@
-import slide1 from "../../../public/baner1.webp";
-import slide2 from "../../../public/baner2.webp";
-import slide3 from "../../../public/baner3.webp";
+import slide1 from "../../assets/img/slide1.webp";
+import slide2 from "../../assets/img/slide2.webp";
+import slide3 from "../../assets/img/slide3.webp";
 
 export default function Carousel() {
   return (
