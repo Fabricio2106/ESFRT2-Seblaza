@@ -1,39 +1,66 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCarrito } from "../hooks/useCarrito";
+import Swal from "sweetalert2";
 
 export default function Carrito() {
-  // Simulación de productos en el carrito (sin funcionalidad real)
-  const [productosCarrito, setProductosCarrito] = useState([
-    {
-      id: 1,
-      nombre: "Extractor de baño Decor",
-      precio: 499.00,
-      cantidad: 1,
-      imagen: "https://via.placeholder.com/150",
-      stock: 10
-    },
-    {
-      id: 2,
-      nombre: "Ventilador de pared",
-      precio: 350.00,
-      cantidad: 2,
-      imagen: "https://via.placeholder.com/150",
-      stock: 5
+  const navigate = useNavigate();
+  const { carrito, actualizarCantidad, eliminarDelCarrito, vaciarCarrito, obtenerTotal } = useCarrito();
+
+  const handleVaciarCarrito = () => {
+    Swal.fire({
+      title: "¿Vaciar carrito?",
+      text: "Se eliminarán todos los productos del carrito",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, vaciar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        vaciarCarrito();
+        Swal.fire({
+          icon: "success",
+          title: "Carrito vaciado",
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
+  };
+
+  const handleEliminar = (id, nombre) => {
+    Swal.fire({
+      title: "¿Eliminar producto?",
+      text: `${nombre} se eliminará del carrito`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminarDelCarrito(id);
+      }
+    });
+  };
+
+  const handleProcederAlPago = () => {
+    if (carrito.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Carrito vacío",
+        text: "Agrega productos al carrito para continuar",
+        timer: 2000
+      });
+      return;
     }
-  ]);
-
-  const actualizarCantidad = (id, nuevaCantidad) => {
-    if (nuevaCantidad < 1) return;
-    setProductosCarrito(productosCarrito.map(p => 
-      p.id === id ? { ...p, cantidad: Math.min(nuevaCantidad, p.stock) } : p
-    ));
+    // Navegar a la página de pago del carrito
+    navigate("/carrito/pago");
   };
 
-  const eliminarProducto = (id) => {
-    setProductosCarrito(productosCarrito.filter(p => p.id !== id));
-  };
-
-  const subtotal = productosCarrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
+  const subtotal = obtenerTotal();
   const envio = subtotal > 100 ? 0 : 15;
   const total = subtotal + envio;
 
@@ -66,7 +93,7 @@ export default function Carrito() {
         }}></div>
       </div>
 
-      {productosCarrito.length === 0 ? (
+      {carrito.length === 0 ? (
         <div className="text-center py-5">
           <i className="bi bi-cart-x" style={{ fontSize: "5rem", color: "#ccc" }}></i>
           <h3 className="mt-4 mb-3">Tu carrito está vacío</h3>
@@ -83,28 +110,23 @@ export default function Carrito() {
             <div className="bg-white p-4 rounded shadow-sm mb-3">
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="fw-bold mb-0">
-                  Productos ({productosCarrito.length})
+                  Productos ({carrito.length})
                 </h3>
                 <button 
                   className="btn btn-link text-danger text-decoration-none"
-                  onClick={() => setProductosCarrito([])}
+                  onClick={handleVaciarCarrito}
                 >
                   <i className="bi bi-trash me-1"></i>
                   Vaciar Carrito
                 </button>
               </div>
 
-              <div className="alert alert-info d-flex align-items-center mb-4">
-                <i className="bi bi-info-circle me-2"></i>
-                <span>Esta es una página de demostración. Los productos mostrados son de ejemplo.</span>
-              </div>
-
-              {productosCarrito.map((producto) => (
+              {carrito.map((producto) => (
                 <div key={producto.id} className="border-bottom pb-4 mb-4">
                   <div className="row g-3">
                     <div className="col-md-2">
                       <img
-                        src={producto.imagen}
+                        src={producto.img_url || producto.imagen}
                         alt={producto.nombre}
                         className="img-fluid rounded"
                         style={{ width: "100%", height: "100px", objectFit: "contain" }}
@@ -118,7 +140,7 @@ export default function Carrito() {
                       </p>
                       <button 
                         className="btn btn-link text-danger p-0 text-decoration-none"
-                        onClick={() => eliminarProducto(producto.id)}
+                        onClick={() => handleEliminar(producto.id, producto.nombre)}
                       >
                         <i className="bi bi-trash me-1"></i>
                         Eliminar
@@ -218,7 +240,10 @@ export default function Carrito() {
                 <h4 className="fw-bold text-success">S/ {total.toFixed(2)}</h4>
               </div>
               
-              <button className="btn btn-custom w-100 py-3 mb-3" disabled>
+              <button 
+                className="btn btn-custom w-100 py-3 mb-3"
+                onClick={handleProcederAlPago}
+              >
                 <i className="bi bi-credit-card me-2"></i>
                 Proceder al Pago
               </button>

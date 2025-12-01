@@ -197,6 +197,15 @@ export default function MiPerfil() {
               Forma de Pago
             </button>
           </li>
+          <li className="nav-item">
+            <a 
+              href="/mis-resenas"
+              className="nav-link"
+            >
+              <i className="bi bi-star-fill me-2"></i>
+              Opiniones
+            </a>
+          </li>
         </ul>
 
         {/* Formulario */}

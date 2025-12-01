@@ -7,7 +7,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import { Product } from "../pages/Product";
 import { Entrega } from "../pages/Entrega";
-//import { Pago } from "../pages/Pago";
+import Pago from "../pages/Pago";
 //import { DetallePago } from "../pages/DetallePago";
 import Contacto from "../pages/Contacto";
 import Registro from "../pages/Registro";
@@ -15,6 +15,7 @@ import ComprarAhora from "../pages/ComprarAhora";
 import Carrito from "../pages/Carrito";
 import MiPerfil from "../pages/MiPerfil";
 import MisPedidos from "../pages/MisPedidos";
+import MisResenas from "../pages/MisResenas";
 import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "producto/:id", element: <Product /> },
       { path: "producto/:id/comprar", element: <ComprarAhora /> },
+      { path: "producto/:id/pago", element: <Pago /> },
       { path: "carrito", element: <Carrito /> },
+      { path: "carrito/pago", element: <Pago /> },
       { path: "contacto", element: <Contacto /> },
       { 
         path: "mi-perfil", 
@@ -40,6 +43,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MisPedidos />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: "mis-resenas", 
+        element: (
+          <ProtectedRoute>
+            <MisResenas />
           </ProtectedRoute>
         ) 
       },
