@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import { MainLayout } from "../layout/MainLayout";
 import { AuthLayout } from "../layout/AuthLayout";
+import AdminLayout from "../layout/AdminLayout";
 import { ProtectedRoute } from "../components/ProtectedRoute";
+import { ProtectedAdminRoute } from "../components/ProtectedAdminRoute";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -17,6 +19,8 @@ import MiPerfil from "../pages/MiPerfil";
 import MisPedidos from "../pages/MisPedidos";
 import MisResenas from "../pages/MisResenas";
 import NotFound from "../pages/NotFound";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminProducts from "../pages/admin/AdminProducts";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +75,22 @@ const router = createBrowserRouter([
       { index: true, element: <Entrega /> },
       //{ path: "pago", element: <Pago /> },
       //{ path: "pago/detalle", element: <DetallePago /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout />
+      </ProtectedAdminRoute>
+    ),
+    children: [
+      { index: true, element: <AdminDashboard /> },
+      { path: "dashboard", element: <AdminDashboard /> },
+      { path: "pedidos", element: <div className="p-4"><h2>Gestión de Pedidos</h2><p>Próximamente...</p></div> },
+      { path: "productos", element: <AdminProducts /> },
+      { path: "clientes", element: <div className="p-4"><h2>Gestión de Clientes</h2><p>Próximamente...</p></div> },
+      { path: "configuracion", element: <div className="p-4"><h2>Configuración</h2><p>Próximamente...</p></div> },
     ],
   },
   {

@@ -197,6 +197,19 @@ export default function Navbar1() {
                       Opiniones
                     </Link>
                   </li>
+                  {(user?.user_metadata?.rol === 'administrador' || user?.email === 'davidgarcia241296@gmail.com') && (
+                    <>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link className="dropdown-item text-primary fw-semibold" to="/admin">
+                          <i className="bi bi-speedometer2 me-2"></i>
+                          Panel de Administración
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
