@@ -478,19 +478,6 @@ export default function MiPerfil() {
                       <label className="btn btn-outline-primary" htmlFor="tipoPlin">
                         <i className="bi bi-phone me-2"></i>Plin
                       </label>
-
-                      <input
-                        type="radio"
-                        className="btn-check"
-                        name="formaPago.tipo"
-                        id="tipoEfectivo"
-                        value="efectivo"
-                        checked={formData.formaPago.tipo === 'efectivo'}
-                        onChange={handleChange}
-                      />
-                      <label className="btn btn-outline-primary" htmlFor="tipoEfectivo">
-                        <i className="bi bi-cash me-2"></i>Efectivo
-                      </label>
                     </div>
                   </div>
 
@@ -570,15 +557,6 @@ export default function MiPerfil() {
                       <div className="alert alert-info">
                         <i className="bi bi-info-circle me-2"></i>
                         El pago se realizará al momento de confirmar tu pedido mediante {formData.formaPago.tipo === 'yape' ? 'Yape' : 'Plin'}.
-                      </div>
-                    </div>
-                  )}
-
-                  {formData.formaPago.tipo === 'efectivo' && (
-                    <div className="col-12">
-                      <div className="alert alert-info">
-                        <i className="bi bi-info-circle me-2"></i>
-                        El pago se realizará en efectivo al momento de la entrega.
                       </div>
                     </div>
                   )}

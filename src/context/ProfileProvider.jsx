@@ -1,17 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProfileContext } from "./ProfileContext";
 
-export const ProfileProvider = ({ children }) => {
-  const [profileData, setProfileData] = useState({
-    // Datos personales
+const STORAGE_KEY = "seblaza_profile_data";
+
+const getInitialProfileData = () => {
+  try {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      return JSON.parse(savedData);
+    }
+  } catch (error) {
+    console.error("Error al cargar datos del perfil desde localStorage:", error);
+  }
+  
+  // Datos por defecto si no hay nada en localStorage
+  return {
     nombres: "",
     apellidos: "",
     dni: "",
     fechaNacimiento: "",
     telefono: "",
     email: "",
-    
-    // Dirección de envío
     direccion: {
       calle: "",
       numero: "",
@@ -21,16 +30,27 @@ export const ProfileProvider = ({ children }) => {
       codigoPostal: "",
       referencia: ""
     },
-    
-    // Forma de pago
     formaPago: {
-      tipo: "", // 'tarjeta', 'yape', 'plin', 'efectivo'
+      tipo: "",
       numeroTarjeta: "",
       nombreTitular: "",
       fechaExpiracion: "",
       cvv: ""
     }
-  });
+  };
+};
+
+export const ProfileProvider = ({ children }) => {
+  const [profileData, setProfileData] = useState(getInitialProfileData);
+
+  // Guardar en localStorage cada vez que cambian los datos
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(profileData));
+    } catch (error) {
+      console.error("Error al guardar datos del perfil en localStorage:", error);
+    }
+  }, [profileData]);
 
   const updateProfile = (newData) => {
     setProfileData(prevData => ({
@@ -60,7 +80,7 @@ export const ProfileProvider = ({ children }) => {
   };
 
   const resetProfile = () => {
-    setProfileData({
+    const emptyProfile = {
       nombres: "",
       apellidos: "",
       dni: "",
@@ -83,7 +103,13 @@ export const ProfileProvider = ({ children }) => {
         fechaExpiracion: "",
         cvv: ""
       }
-    });
+    };
+    setProfileData(emptyProfile);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error("Error al limpiar datos del perfil en localStorage:", error);
+    }
   };
 
   return (
