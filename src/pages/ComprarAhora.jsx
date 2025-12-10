@@ -155,45 +155,6 @@ export default function ComprarAhora() {
               </div>
             </div>
           </div>
-
-          {/* Información de Envío */}
-          <div className="bg-white p-4 rounded shadow-sm">
-            <h3 className="fw-bold mb-4">
-              <i className="bi bi-truck me-2 text-primary"></i>
-              Información de Envío
-            </h3>
-            
-            <div className="alert alert-info d-flex align-items-center">
-              <i className="bi bi-info-circle me-2"></i>
-              <span>Esta es una página de demostración. La funcionalidad de compra aún no está implementada.</span>
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Nombre Completo</label>
-              <input type="text" className="form-control" placeholder="Juan Pérez" disabled />
-            </div>
-            
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Dirección</label>
-              <input type="text" className="form-control" placeholder="Av. Principal 123" disabled />
-            </div>
-            
-            <div className="row g-3 mb-3">
-              <div className="col-md-6">
-                <label className="form-label fw-semibold">Ciudad</label>
-                <input type="text" className="form-control" placeholder="Lima" disabled />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label fw-semibold">Código Postal</label>
-                <input type="text" className="form-control" placeholder="15001" disabled />
-              </div>
-            </div>
-            
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Teléfono</label>
-              <input type="tel" className="form-control" placeholder="+51 999 888 777" disabled />
-            </div>
-          </div>
         </div>
 
         {/* Columna Derecha - Resumen de Compra */}
@@ -227,10 +188,10 @@ export default function ComprarAhora() {
               <h4 className="fw-bold text-success">S/ {total.toFixed(2)}</h4>
             </div>
             
-            <button className="btn btn-custom w-100 py-3 mb-3" disabled>
+            <Link to={`/producto/${id}/pago`} className="btn btn-custom w-100 py-3 mb-3 text-decoration-none d-block text-center">
               <i className="bi bi-credit-card me-2"></i>
               Proceder al Pago
-            </button>
+            </Link>
             
             <Link to={`/producto/${id}`} className="btn btn-outline-secondary w-100">
               <i className="bi bi-arrow-left me-2"></i>
@@ -238,18 +199,21 @@ export default function ComprarAhora() {
             </Link>
             
             <div className="mt-4 p-3 bg-light rounded">
-              <h6 className="fw-bold mb-3">Métodos de Pago Aceptados:</h6>
-              <div className="d-flex gap-2 flex-wrap">
-                <span className="badge bg-secondary">
+              <h6 className="fw-bold mb-3">
+                <i className="bi bi-credit-card-2-front me-2 text-primary"></i>
+                Métodos de Pago Aceptados:
+              </h6>
+              <div className="d-flex gap-2 flex-wrap justify-content-center">
+                <span className="badge bg-primary px-3 py-2" style={{ fontSize: "0.9rem" }}>
                   <i className="bi bi-credit-card me-1"></i>Visa
                 </span>
-                <span className="badge bg-secondary">
+                <span className="badge bg-primary px-3 py-2" style={{ fontSize: "0.9rem" }}>
                   <i className="bi bi-credit-card me-1"></i>Mastercard
                 </span>
-                <span className="badge bg-secondary">
+                <span className="badge bg-info px-3 py-2" style={{ fontSize: "0.9rem" }}>
                   <i className="bi bi-wallet2 me-1"></i>PayPal
                 </span>
-                <span className="badge bg-secondary">
+                <span className="badge bg-success px-3 py-2" style={{ fontSize: "0.9rem" }}>
                   <i className="bi bi-bank me-1"></i>Transferencia
                 </span>
               </div>

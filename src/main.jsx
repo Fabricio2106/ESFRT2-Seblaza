@@ -5,6 +5,7 @@ import router from "./router/AppRouter";
 import { AuthProvider } from "./context/AuthProvider";
 import { ProfileProvider } from "./context/ProfileProvider";
 import { PedidosProvider } from "./context/PedidosProvider";
+import { CarritoProvider } from "./context/CarritoProvider";
 import "./assets/css/variables.css";
 import "./assets/css/global.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -16,7 +17,9 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <ProfileProvider>
         <PedidosProvider>
-          <RouterProvider router={router} />
+          <CarritoProvider>
+            <RouterProvider router={router} />
+          </CarritoProvider>
         </PedidosProvider>
       </ProfileProvider>
     </AuthProvider>

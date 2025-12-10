@@ -2,7 +2,7 @@ import { useState } from "react";
 import { usePedidos } from "../hooks/usePedidos";
 
 export default function MisPedidos() {
-  const { pedidos, filtrarPorEstado, obtenerPedido } = usePedidos();
+  const { pedidos, loading, filtrarPorEstado, obtenerPedido } = usePedidos();
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -59,10 +59,22 @@ export default function MisPedidos() {
     return pedidos.filter(p => p.estado === estado).length;
   };
 
+  if (loading) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mis-pedidos-page">
       <div className="container-xl py-5">
-        <h1 className="fw-bold mb-4">Mis Pedidos</h1>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="fw-bold mb-0">Mis Pedidos</h1>
+        </div>
 
         {/* Estadísticas rápidas */}
         <div className="row g-3 mb-4">

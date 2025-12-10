@@ -3,13 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../config/supaBaseConfig";
 import { useAuth } from "../hooks/useAuth";
+import { useCarrito } from "../hooks/useCarrito";
 
 export const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { agregarAlCarrito } = useCarrito();
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cantidad, setCantidad] = useState(1);
 
   useEffect(() => {
     const fetchProducto = async () => {
@@ -40,6 +43,10 @@ export const Product = () => {
       // Si hay usuario, ir directamente a comprar
       navigate(`/producto/${id}/comprar`);
     }
+  };
+
+  const handleAgregarAlCarrito = () => {
+    agregarAlCarrito(producto, cantidad);
   };
 
   if (loading || authLoading) {
@@ -191,6 +198,38 @@ export const Product = () => {
                 </p>
               </div>
 
+              {/* Botón de cantidad */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Cantidad:</label>
+                <div className="input-group" style={{ maxWidth: "200px" }}>
+                  <button 
+                    className="btn btn-outline-secondary"
+                    onClick={() => cantidad > 1 && setCantidad(cantidad - 1)}
+                  >
+                    <i className="bi bi-dash"></i>
+                  </button>
+                  <input
+                    type="number"
+                    className="form-control text-center"
+                    value={cantidad}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 1;
+                      if (val >= 1 && val <= producto.stock) {
+                        setCantidad(val);
+                      }
+                    }}
+                    min="1"
+                    max={producto.stock}
+                  />
+                  <button 
+                    className="btn btn-outline-secondary"
+                    onClick={() => cantidad < producto.stock && setCantidad(cantidad + 1)}
+                  >
+                    <i className="bi bi-plus"></i>
+                  </button>
+                </div>
+              </div>
+
               {/* Botones de acción */}
               <div className="d-grid gap-3">
                 <button 
@@ -202,13 +241,14 @@ export const Product = () => {
                   Comprar Ahora
                 </button>
                 
-                <Link 
-                  to="/carrito"
+                <button
+                  onClick={handleAgregarAlCarrito}
                   className={`btn btn-outline-primary btn-lg py-3 ${producto.stock === 0 ? 'disabled' : ''}`}
+                  disabled={producto.stock === 0}
                 >
                   <i className="bi bi-cart-plus me-2"></i>
                   Agregar al Carrito
-                </Link>
+                </button>
               </div>
 
               {/* Información adicional */}

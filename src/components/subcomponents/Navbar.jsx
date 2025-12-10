@@ -5,11 +5,14 @@ import { BsCart3 } from "react-icons/bs";
 import { useEffect } from "react";
 import * as bootstrap from "bootstrap";
 import { useAuth } from "../../hooks/useAuth";
+import { useCarrito } from "../../hooks/useCarrito";
 import Swal from "sweetalert2";
 
 export default function Navbar1() {
   const { user, signOut } = useAuth();
+  const { obtenerCantidadTotal } = useCarrito();
   const navigate = useNavigate();
+  const cantidadCarrito = obtenerCantidadTotal();
 
   useEffect(() => {
     // Inicializa los dropdowns de Bootstrap (necesario en React + Vite)
@@ -145,7 +148,6 @@ export default function Navbar1() {
           </div>
 
           {/* Íconos derecha */}
-          {/* Íconos derecha */}
           <div className="d-flex align-items-center gap-4 ms-4">
 
             {/* Ícono de usuario (Inicio de sesión) */}
@@ -179,14 +181,37 @@ export default function Navbar1() {
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/mi-perfil">
+                      <i className="bi bi-person me-2"></i>
+                      <i className="bi bi-person me-2"></i>
                       Mi Perfil
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/mis-pedidos">
+                      <i className="bi bi-bag me-2"></i>
+                      <i className="bi bi-bag me-2"></i>
                       Mis Pedidos
                     </Link>
                   </li>
+                  <li>
+                    <Link className="dropdown-item" to="/mis-resenas">
+                      <i className="bi bi-star me-2"></i>
+                      Opiniones
+                    </Link>
+                  </li>
+                  {(user?.user_metadata?.rol === 'administrador' || user?.email === 'davidgarcia241296@gmail.com') && (
+                    <>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link className="dropdown-item text-primary fw-semibold" to="/admin">
+                          <i className="bi bi-speedometer2 me-2"></i>
+                          Panel de Administración
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
@@ -209,12 +234,22 @@ export default function Navbar1() {
             {/* Carrito */}
             <Link to="/carrito" className="position-relative text-dark">
               <BsCart3 size={20} />
-              <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
-                style={{ fontSize: "0.6rem" }}
-              >
-                2
-              </span>
+              {cantidadCarrito > 0 && (
+                <span
+                  className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
+                  style={{ fontSize: "0.6rem" }}
+                >
+                  {cantidadCarrito}
+                </span>
+              )}
+              {cantidadCarrito > 0 && (
+                <span
+                  className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
+                  style={{ fontSize: "0.6rem" }}
+                >
+                  {cantidadCarrito}
+                </span>
+              )}
             </Link>
           </div>
         </div>
