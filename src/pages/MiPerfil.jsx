@@ -1,14 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProfile } from "../hooks/useProfile";
 import { validaciones } from "../utils/validaciones";
+import { supabase } from "../config/supaBaseConfig";
+import { useAuth } from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 export default function MiPerfil() {
-  const { profileData, updateProfile, updateDireccion, updateFormaPago } = useProfile();
+  const { profileData, updateDireccion, updateFormaPago } = useProfile();
+  const { user } = useAuth();
   
   const [formData, setFormData] = useState(profileData);
   const [errors, setErrors] = useState({});
   const [seccionActiva, setSeccionActiva] = useState('personal');
+  const [cargando, setCargando] = useState(true);
   const [mensaje, setMensaje] = useState({ tipo: '', texto: '' });
+
+  // Cargar datos del perfil desde Supabase al montar el componente
+  useEffect(() => {
+    const cargarPerfil = async () => {
+      if (!user) {
+        setCargando(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('perfiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+          console.error('Error al cargar perfil:', error);
+          return;
+        }
+
+        if (data) {
+          setFormData(prev => ({
+            ...prev,
+            nombres: data.nombres || '',
+            apellidos: data.apellidos || '',
+            dni: data.dni || '',
+            fechaNacimiento: data.fecha_nacimiento || '',
+            telefono: data.telefono || '',
+            email: user.email || '',
+            direccionTexto: data.direccion || '',
+            rol: data.rol || 'cliente'
+          }));
+        } else {
+          // Si no existe perfil, usar email del usuario autenticado
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || '',
+            rol: 'cliente'
+          }));
+        }
+      } catch (error) {
+        console.error('Error inesperado al cargar perfil:', error);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarPerfil();
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,7 +158,7 @@ export default function MiPerfil() {
     return nuevosErrores;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMensaje({ tipo: '', texto: '' });
     
@@ -127,31 +182,75 @@ export default function MiPerfil() {
       return;
     }
     
-    // Actualizar datos en memoria según la sección
+    // Actualizar datos según la sección
     if (seccionActiva === 'personal') {
-      updateProfile({
-        nombres: formData.nombres,
-        apellidos: formData.apellidos,
-        dni: formData.dni,
-        fechaNacimiento: formData.fechaNacimiento,
-        telefono: formData.telefono,
-        email: formData.email
-      });
+      try {
+        setCargando(true);
+
+        // Guardar en Supabase
+        const datosActualizados = {
+          id: user.id,
+          nombres: formData.nombres,
+          apellidos: formData.apellidos,
+          dni: formData.dni,
+          telefono: formData.telefono,
+          fecha_nacimiento: formData.fechaNacimiento,
+          direccion: formData.direccionTexto
+        };
+
+        const { error } = await supabase
+          .from('perfiles')
+          .upsert(datosActualizados, { onConflict: 'id' });
+
+        if (error) {
+          console.error('Error al guardar perfil:', error);
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudieron guardar los datos. Por favor, intenta nuevamente.'
+          });
+          return;
+        }
+
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Datos personales actualizados correctamente',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        console.error('Error inesperado:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error inesperado. Por favor, intenta nuevamente.'
+        });
+      } finally {
+        setCargando(false);
+      }
     } else if (seccionActiva === 'direccion') {
       updateDireccion(formData.direccion);
+      setMensaje({ 
+        tipo: 'success', 
+        texto: '¡Dirección actualizada correctamente!' 
+      });
+      
+      setTimeout(() => {
+        setMensaje({ tipo: '', texto: '' });
+      }, 3000);
     } else if (seccionActiva === 'pago') {
       updateFormaPago(formData.formaPago);
+      setMensaje({ 
+        tipo: 'success', 
+        texto: '¡Forma de pago actualizada correctamente!' 
+      });
+      
+      setTimeout(() => {
+        setMensaje({ tipo: '', texto: '' });
+      }, 3000);
     }
-    
-    setMensaje({ 
-      tipo: 'success', 
-      texto: '¡Datos actualizados correctamente!' 
-    });
-    
-    // Limpiar mensaje después de 3 segundos
-    setTimeout(() => {
-      setMensaje({ tipo: '', texto: '' });
-    }, 3000);
   };
 
   return (
@@ -159,14 +258,24 @@ export default function MiPerfil() {
       <div className="container-xl py-5">
         <h1 className="fw-bold mb-4">Mi Perfil</h1>
         
-        {/* Mensaje de confirmación/error */}
-        {mensaje.texto && (
-          <div className={`alert ${mensaje.tipo === 'success' ? 'alert-success' : 'alert-danger'} alert-dismissible fade show`} role="alert">
-            <i className={`bi ${mensaje.tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2`}></i>
-            {mensaje.texto}
-            <button type="button" className="btn-close" onClick={() => setMensaje({ tipo: '', texto: '' })}></button>
+        {/* Spinner de carga */}
+        {cargando && seccionActiva === 'personal' ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+            <p className="mt-3 text-muted">Cargando datos del perfil...</p>
           </div>
-        )}
+        ) : (
+          <>
+            {/* Mensaje de confirmación/error */}
+            {mensaje.texto && (
+              <div className={`alert ${mensaje.tipo === 'success' ? 'alert-success' : 'alert-danger'} alert-dismissible fade show`} role="alert">
+                <i className={`bi ${mensaje.tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2`}></i>
+                {mensaje.texto}
+                <button type="button" className="btn-close" onClick={() => setMensaje({ tipo: '', texto: '' })}></button>
+              </div>
+            )}
         
         {/* Tabs de navegación */}
         <ul className="nav nav-tabs mb-4">
@@ -303,14 +412,48 @@ export default function MiPerfil() {
                     </label>
                     <input
                       type="email"
-                      className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                      className="form-control"
                       id="email"
                       name="email"
                       value={formData.email}
-                      onChange={handleChange}
-                      placeholder="tu@email.com"
+                      readOnly
+                      disabled
+                      style={{ backgroundColor: '#e9ecef', cursor: 'not-allowed' }}
                     />
-                    {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                    <small className="text-muted">El email no puede ser modificado</small>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="direccionTexto" className="form-label fw-semibold">
+                      Dirección
+                    </label>
+                    <input
+                      type="text"
+                      className={`form-control ${errors.direccionTexto ? 'is-invalid' : ''}`}
+                      id="direccionTexto"
+                      name="direccionTexto"
+                      value={formData.direccionTexto || ''}
+                      onChange={handleChange}
+                      placeholder="Ej: Av. Principal 123, Lima"
+                    />
+                    {errors.direccionTexto && <div className="invalid-feedback">{errors.direccionTexto}</div>}
+                  </div>
+
+                  <div className="col-md-6">
+                    <label htmlFor="rol" className="form-label fw-semibold">
+                      Rol
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="rol"
+                      name="rol"
+                      value={formData.rol || 'cliente'}
+                      readOnly
+                      disabled
+                      style={{ backgroundColor: '#e9ecef', cursor: 'not-allowed' }}
+                    />
+                    <small className="text-muted">El rol no puede ser modificado</small>
                   </div>
                 </div>
               )}
@@ -573,6 +716,8 @@ export default function MiPerfil() {
             </form>
           </div>
         </div>
+          </>
+        )}
       </div>
     </div>
   );

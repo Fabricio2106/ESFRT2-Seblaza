@@ -16,7 +16,7 @@ export const ProtectedAdminRoute = ({ children }) => {
 
   // Verificar si el usuario está autenticado y es administrador
   if (!user) {
-    return <Navigate to="/ingreso" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Lista de emails de administradores autorizados

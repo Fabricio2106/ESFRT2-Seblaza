@@ -21,6 +21,8 @@ const getInitialProfileData = () => {
     fechaNacimiento: "",
     telefono: "",
     email: "",
+    direccionTexto: "",
+    rol: "cliente",
     direccion: {
       calle: "",
       numero: "",
@@ -87,6 +89,8 @@ export const ProfileProvider = ({ children }) => {
       fechaNacimiento: "",
       telefono: "",
       email: "",
+      direccionTexto: "",
+      rol: "cliente",
       direccion: {
         calle: "",
         numero: "",

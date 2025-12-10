@@ -21,6 +21,7 @@ import MisResenas from "../pages/MisResenas";
 import NotFound from "../pages/NotFound";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminProducts from "../pages/admin/AdminProducts";
+import AdminClientes from "../pages/admin/AdminClientes";
 
 const router = createBrowserRouter([
   {
@@ -89,7 +90,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <AdminDashboard /> },
       { path: "pedidos", element: <div className="p-4"><h2>Gestión de Pedidos</h2><p>Próximamente...</p></div> },
       { path: "productos", element: <AdminProducts /> },
-      { path: "clientes", element: <div className="p-4"><h2>Gestión de Clientes</h2><p>Próximamente...</p></div> },
+      { path: "clientes", element: <AdminClientes /> },
       { path: "configuracion", element: <div className="p-4"><h2>Configuración</h2><p>Próximamente...</p></div> },
     ],
   },
