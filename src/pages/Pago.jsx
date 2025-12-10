@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../config/supaBaseConfig";
 import { useCarrito } from "../hooks/useCarrito";
 import { usePedidos } from "../hooks/usePedidos";
+import { useAuth } from "../hooks/useAuth";
 import Swal from "sweetalert2";
 
 export default function Pago() {
@@ -11,6 +12,7 @@ export default function Pago() {
   const location = useLocation();
   const { carrito, vaciarCarrito } = useCarrito();
   const { agregarPedido } = usePedidos();
+  const { user } = useAuth();
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [metodoPago, setMetodoPago] = useState("credito");
@@ -29,7 +31,47 @@ export default function Pago() {
 
   // Determinar si es pago desde carrito o desde producto individual
   const esDesdeCarrito = location.pathname === "/carrito/pago";
-  const productosAPagar = esDesdeCarrito ? carrito : [];
+
+  // Cargar datos del usuario desde Supabase
+  useEffect(() => {
+    const cargarDatosUsuario = async () => {
+      if (!user) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('perfiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error al cargar datos del usuario:', error);
+          return;
+        }
+
+        if (data) {
+          setDatosEnvio(prev => ({
+            ...prev,
+            nombreCompleto: `${data.nombres || ''} ${data.apellidos || ''}`.trim(),
+            direccion: data.direccion || '',
+            telefono: data.telefono || '',
+            email: user.email || '',
+            // Mantener ciudad, codigoPostal y notasAdicionales vacíos
+          }));
+        } else {
+          // Si no existe perfil, solo cargar el email
+          setDatosEnvio(prev => ({
+            ...prev,
+            email: user.email || ''
+          }));
+        }
+      } catch (error) {
+        console.error('Error inesperado al cargar datos del usuario:', error);
+      }
+    };
+
+    cargarDatosUsuario();
+  }, [user]);
 
   useEffect(() => {
     const fetchProducto = async () => {
