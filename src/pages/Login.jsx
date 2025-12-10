@@ -48,9 +48,15 @@ export default function Login() {
         showConfirmButton: false,
       });
       
-      // Redirigir a la página solicitada o al inicio
+      // Verificar si es administrador
+      const adminEmails = ['davidgarcia241296@gmail.com'];
+      const isAdmin = data.user?.user_metadata?.rol === 'administrador' || adminEmails.includes(data.user?.email);
+      
+      // Redirigir según el tipo de usuario
       if (redirect) {
         navigate(redirect);
+      } else if (isAdmin) {
+        navigate("/admin");
       } else {
         navigate("/");
       }

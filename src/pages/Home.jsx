@@ -107,6 +107,7 @@ export default function Home() {
           <div className="col-lg-3 col-md-4 mb-4">
             <div className="filter-sidebar bg-white p-4 rounded shadow-sm sticky-top" style={{ top: "20px" }}>
               {/* Header */}
+              
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <h5 className="fw-bold mb-0">Filtros</h5>
                 <button

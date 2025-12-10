@@ -125,10 +125,7 @@ export default function Pago() {
     
     setProcesando(true);
     
-    // Simulación de procesamiento de pago
-    setTimeout(() => {
-      setProcesando(false);
-      
+    try {
       // Preparar datos del pedido
       let productosDelPedido;
       if (esDesdeCarrito) {
@@ -167,13 +164,15 @@ export default function Pago() {
         }
       };
 
-      // Guardar el pedido
-      agregarPedido(nuevoPedido);
+      // Guardar el pedido en Supabase
+      await agregarPedido(nuevoPedido);
       
       // Si es desde carrito, vaciar el carrito después del pago
       if (esDesdeCarrito) {
         vaciarCarrito();
       }
+      
+      setProcesando(false);
       
       Swal.fire({
         icon: "success",
@@ -183,7 +182,27 @@ export default function Pago() {
       }).then(() => {
         navigate("/mis-pedidos");
       });
-    }, 2000);
+    } catch (error) {
+      setProcesando(false);
+      console.error("Error al procesar el pago:", error);
+      console.error("Mensaje de error:", error?.message);
+      console.error("Detalles del error:", error?.details);
+      
+      let mensajeError = "Hubo un problema al procesar tu pedido. Por favor, intenta nuevamente.";
+      
+      if (error?.message) {
+        mensajeError = error.message;
+      } else if (error?.details) {
+        mensajeError = error.details;
+      }
+      
+      Swal.fire({
+        icon: "error",
+        title: "Error al procesar el pago",
+        text: mensajeError,
+        footer: error?.hint || ""
+      });
+    }
   };
 
   if (loading) {
