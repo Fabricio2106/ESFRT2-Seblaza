@@ -1,15 +1,37 @@
 import { useState, useEffect } from "react";
-import { useProfile } from "../hooks/useProfile";
 import { validaciones } from "../utils/validaciones";
 import { supabase } from "../config/supaBaseConfig";
 import { useAuth } from "../hooks/useAuth";
 import Swal from "sweetalert2";
 
 export default function MiPerfil() {
-  const { profileData, updateDireccion, updateFormaPago } = useProfile();
   const { user } = useAuth();
   
-  const [formData, setFormData] = useState(profileData);
+  const [formData, setFormData] = useState({
+    nombres: "",
+    apellidos: "",
+    dni: "",
+    fechaNacimiento: "",
+    telefono: "",
+    email: "",
+    direccionTexto: "",
+    direccion: {
+      calle: "",
+      numero: "",
+      departamento: "",
+      ciudad: "",
+      distrito: "",
+      codigoPostal: "",
+      referencia: ""
+    },
+    formaPago: {
+      tipo: "",
+      numeroTarjeta: "",
+      nombreTitular: "",
+      fechaExpiracion: "",
+      cvv: ""
+    }
+  });
   const [errors, setErrors] = useState({});
   const [seccionActiva, setSeccionActiva] = useState('personal');
   const [cargando, setCargando] = useState(true);
@@ -24,6 +46,7 @@ export default function MiPerfil() {
       }
 
       try {
+        // Cargar datos de Supabase
         const { data, error } = await supabase
           .from('perfiles')
           .select('*')
@@ -32,7 +55,32 @@ export default function MiPerfil() {
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
           console.error('Error al cargar perfil:', error);
-          return;
+        }
+
+        // Cargar datos de dirección y forma de pago del localStorage específico del usuario
+        const userStorageKey = `seblaza_profile_${user.id}`;
+        const savedUserData = localStorage.getItem(userStorageKey);
+        let direccionGuardada = {
+          calle: "",
+          numero: "",
+          departamento: "",
+          ciudad: "",
+          distrito: "",
+          codigoPostal: "",
+          referencia: ""
+        };
+        let formaPagoGuardada = {
+          tipo: "",
+          numeroTarjeta: "",
+          nombreTitular: "",
+          fechaExpiracion: "",
+          cvv: ""
+        };
+
+        if (savedUserData) {
+          const parsedData = JSON.parse(savedUserData);
+          if (parsedData.direccion) direccionGuardada = parsedData.direccion;
+          if (parsedData.formaPago) formaPagoGuardada = parsedData.formaPago;
         }
 
         if (data) {
@@ -45,14 +93,16 @@ export default function MiPerfil() {
             telefono: data.telefono || '',
             email: user.email || '',
             direccionTexto: data.direccion || '',
-            rol: data.rol || 'cliente'
+            direccion: direccionGuardada,
+            formaPago: formaPagoGuardada
           }));
         } else {
           // Si no existe perfil, usar email del usuario autenticado
           setFormData(prev => ({
             ...prev,
             email: user.email || '',
-            rol: 'cliente'
+            direccion: direccionGuardada,
+            formaPago: formaPagoGuardada
           }));
         }
       } catch (error) {
@@ -231,25 +281,51 @@ export default function MiPerfil() {
         setCargando(false);
       }
     } else if (seccionActiva === 'direccion') {
-      updateDireccion(formData.direccion);
-      setMensaje({ 
-        tipo: 'success', 
-        texto: '¡Dirección actualizada correctamente!' 
-      });
-      
-      setTimeout(() => {
-        setMensaje({ tipo: '', texto: '' });
-      }, 3000);
+      try {
+        // Guardar en localStorage específico del usuario
+        const userStorageKey = `seblaza_profile_${user.id}`;
+        const currentData = JSON.parse(localStorage.getItem(userStorageKey) || '{}');
+        currentData.direccion = formData.direccion;
+        localStorage.setItem(userStorageKey, JSON.stringify(currentData));
+        
+        setMensaje({ 
+          tipo: 'success', 
+          texto: '¡Dirección actualizada correctamente!' 
+        });
+        
+        setTimeout(() => {
+          setMensaje({ tipo: '', texto: '' });
+        }, 3000);
+      } catch (error) {
+        console.error('Error al guardar dirección:', error);
+        setMensaje({ 
+          tipo: 'error', 
+          texto: 'Error al guardar la dirección' 
+        });
+      }
     } else if (seccionActiva === 'pago') {
-      updateFormaPago(formData.formaPago);
-      setMensaje({ 
-        tipo: 'success', 
-        texto: '¡Forma de pago actualizada correctamente!' 
-      });
-      
-      setTimeout(() => {
-        setMensaje({ tipo: '', texto: '' });
-      }, 3000);
+      try {
+        // Guardar en localStorage específico del usuario
+        const userStorageKey = `seblaza_profile_${user.id}`;
+        const currentData = JSON.parse(localStorage.getItem(userStorageKey) || '{}');
+        currentData.formaPago = formData.formaPago;
+        localStorage.setItem(userStorageKey, JSON.stringify(currentData));
+        
+        setMensaje({ 
+          tipo: 'success', 
+          texto: '¡Forma de pago actualizada correctamente!' 
+        });
+        
+        setTimeout(() => {
+          setMensaje({ tipo: '', texto: '' });
+        }, 3000);
+      } catch (error) {
+        console.error('Error al guardar forma de pago:', error);
+        setMensaje({ 
+          tipo: 'error', 
+          texto: 'Error al guardar la forma de pago' 
+        });
+      }
     }
   };
 
@@ -437,23 +513,6 @@ export default function MiPerfil() {
                       placeholder="Ej: Av. Principal 123, Lima"
                     />
                     {errors.direccionTexto && <div className="invalid-feedback">{errors.direccionTexto}</div>}
-                  </div>
-
-                  <div className="col-md-6">
-                    <label htmlFor="rol" className="form-label fw-semibold">
-                      Rol
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="rol"
-                      name="rol"
-                      value={formData.rol || 'cliente'}
-                      readOnly
-                      disabled
-                      style={{ backgroundColor: '#e9ecef', cursor: 'not-allowed' }}
-                    />
-                    <small className="text-muted">El rol no puede ser modificado</small>
                   </div>
                 </div>
               )}
