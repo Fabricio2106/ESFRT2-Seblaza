@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { usePedidos } from "../hooks/usePedidos";
-import { inicializarPedidosEjemplo } from "../utils/inicializarDatosPrueba";
 import Swal from "sweetalert2";
 import extractorBano from "../assets/img/ExtractordeBaño.jpg";
 import termoventilador from "../assets/img/Termoventilador.jpg";
@@ -13,7 +12,6 @@ export default function MisResenas() {
   const { user } = useAuth();
   const { pedidos } = usePedidos();
   const [tabActiva, setTabActiva] = useState("pendientes");
-  const [datosInicializados, setDatosInicializados] = useState(false);
   
   // Obtener productos de pedidos entregados para reseñas pendientes
   const [resenasPendientes, setResenasPendientes] = useState([]);
@@ -26,19 +24,6 @@ export default function MisResenas() {
       setResenasRealizadas(JSON.parse(resenasGuardadas));
     }
   }, []);
-
-  // Inicializar datos de prueba automáticamente si no hay pedidos
-  useEffect(() => {
-    if (!datosInicializados && pedidos.length === 0) {
-      console.log("Inicializando datos de prueba automáticamente...");
-      inicializarPedidosEjemplo();
-      setDatosInicializados(true);
-      // Recargar para que PedidosProvider tome los nuevos datos
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    }
-  }, [pedidos, datosInicializados]);
 
   useEffect(() => {
     console.log("Pedidos totales:", pedidos.length);
@@ -237,6 +222,47 @@ export default function MisResenas() {
     }
 
     cerrarModal();
+  };
+
+  const eliminarResena = (resena) => {
+    Swal.fire({
+      title: '¿Eliminar opinión?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const resenasActuales = JSON.parse(localStorage.getItem("resenas") || "[]");
+        const resenasActualizadas = resenasActuales.filter(r => r.id !== resena.id);
+        
+        localStorage.setItem("resenas", JSON.stringify(resenasActualizadas));
+        setResenasRealizadas(resenasActualizadas);
+        
+        // Agregar nuevamente a pendientes
+        const nuevoPendiente = {
+          id: `${resena.pedidoId}-${resena.productoId}`,
+          productoId: resena.productoId,
+          pedidoId: resena.pedidoId,
+          nombre: resena.nombre,
+          imagen: resena.imagen,
+          fechaCompra: new Date().toISOString(),
+          precio: resena.precio
+        };
+        setResenasPendientes(prev => [...prev, nuevoPendiente]);
+        
+        Swal.fire({
+          icon: 'success',
+          title: '¡Eliminada!',
+          text: 'Tu opinión ha sido eliminada',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    });
   };
 
   const productosMostrar = tabActiva === "pendientes" ? resenasPendientes : resenasRealizadas;
@@ -445,13 +471,22 @@ export default function MisResenas() {
                                   </span>
                                 )}
                               </p>
-                              <button 
-                                className="btn btn-outline-primary btn-sm"
-                                onClick={() => abrirModalEdicion(resena)}
-                              >
-                                <i className="bi bi-pencil me-1"></i>
-                                Editar reseña
-                              </button>
+                              <div className="d-flex gap-2">
+                                <button 
+                                  className="btn btn-outline-primary btn-sm"
+                                  onClick={() => abrirModalEdicion(resena)}
+                                >
+                                  <i className="bi bi-pencil me-1"></i>
+                                  Editar
+                                </button>
+                                <button 
+                                  className="btn btn-outline-danger btn-sm"
+                                  onClick={() => eliminarResena(resena)}
+                                >
+                                  <i className="bi bi-trash me-1"></i>
+                                  Eliminar
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -182,13 +182,11 @@ export default function Navbar1() {
                   <li>
                     <Link className="dropdown-item" to="/mi-perfil">
                       <i className="bi bi-person me-2"></i>
-                      <i className="bi bi-person me-2"></i>
                       Mi Perfil
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/mis-pedidos">
-                      <i className="bi bi-bag me-2"></i>
                       <i className="bi bi-bag me-2"></i>
                       Mis Pedidos
                     </Link>
@@ -234,14 +232,6 @@ export default function Navbar1() {
             {/* Carrito */}
             <Link to="/carrito" className="position-relative text-dark">
               <BsCart3 size={20} />
-              {cantidadCarrito > 0 && (
-                <span
-                  className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
-                  style={{ fontSize: "0.6rem" }}
-                >
-                  {cantidadCarrito}
-                </span>
-              )}
               {cantidadCarrito > 0 && (
                 <span
                   className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"

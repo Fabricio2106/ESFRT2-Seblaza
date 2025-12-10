@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import emailjs from '@emailjs/browser';
+import { useAuth } from "../hooks/useAuth";
+import { supabase } from "../config/supaBaseConfig";
 
 export default function Contacto() {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -12,6 +15,45 @@ export default function Contacto() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
+
+  // Cargar datos del usuario autenticado
+  useEffect(() => {
+    const cargarDatosUsuario = async () => {
+      if (!user) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('perfiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error al cargar datos del usuario:', error);
+          return;
+        }
+
+        if (data) {
+          setFormData(prev => ({
+            ...prev,
+            nombre: `${data.nombres || ''} ${data.apellidos || ''}`.trim(),
+            email: user.email || '',
+            telefono: data.telefono || ''
+          }));
+        } else {
+          // Si no existe perfil, solo cargar el email
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || ''
+          }));
+        }
+      } catch (error) {
+        console.error('Error inesperado al cargar datos del usuario:', error);
+      }
+    };
+
+    cargarDatosUsuario();
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({
@@ -49,14 +91,24 @@ export default function Contacto() {
           message: '¡Mensaje enviado exitosamente! Nos pondremos en contacto contigo pronto.'
         });
         
-        // Resetear formulario
-        setFormData({
-          nombre: "",
-          email: "",
-          telefono: "",
-          asunto: "",
-          mensaje: "",
-        });
+        // Resetear solo campos no protegidos
+        if (user) {
+          // Si está autenticado, mantener nombre, email y teléfono
+          setFormData(prev => ({
+            ...prev,
+            asunto: "",
+            mensaje: "",
+          }));
+        } else {
+          // Si no está autenticado, resetear todo
+          setFormData({
+            nombre: "",
+            email: "",
+            telefono: "",
+            asunto: "",
+            mensaje: "",
+          });
+        }
       }
     } catch (error) {
       console.error('Error al enviar el mensaje:', error);
@@ -257,8 +309,13 @@ export default function Contacto() {
                       onChange={handleChange}
                       required
                       disabled={isLoading}
+                      readOnly={user ? true : false}
                       placeholder="tu@email.com"
+                      style={user ? { backgroundColor: '#e9ecef', cursor: 'not-allowed' } : {}}
                     />
+                    {user && (
+                      <small className="text-muted">El email no puede ser modificado</small>
+                    )}
                   </div>
 
                   <div className="col-md-6">
